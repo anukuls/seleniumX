@@ -1,7 +1,7 @@
 package automationManager;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.AddressException;
+//import javax.mail.MessagingException;
+//import javax.mail.internet.AddressException;
 import javax.swing.*;
 
 import java.awt.BorderLayout;
@@ -140,15 +140,15 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 							//TODO: get the selected suites and scripts, and form a hashmap
 							args = getSuiteScriptHash();
 							
-							try {
-								Base_Driver.main(args);
-							} catch (AddressException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							} catch (MessagingException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
+//							try {
+							Base_Driver.main(args);
+//							} catch (AddressException e1) {
+//								// TODO Auto-generated catch block
+//								e1.printStackTrace();
+//							} catch (MessagingException e1) {
+//								// TODO Auto-generated catch block
+//								e1.printStackTrace();
+//							}
 						}
 					});
 					jp.repaint();
