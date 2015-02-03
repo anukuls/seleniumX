@@ -146,7 +146,7 @@ public class Base_Driver {
 		
 //		System.out.println(suite_script_hash);
 		executeSuite(suite_script_hash);
-		sendEmail();
+//		sendEmail();
 	}
 
 }
