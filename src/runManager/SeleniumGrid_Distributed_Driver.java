@@ -18,10 +18,9 @@ import org.openqa.selenium.firefox.internal.ProfilesIni;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 
-public class SeleniumGrid_Distributed_Driver implements Distributed_Driver {
+public class SeleniumGrid_Distributed_Driver {
 
-	@Override
-	public void readyMasterSlaves() {
+	public static void readyMasterSlaves() {
 		// TODO Auto-generated method stub
 		//NOTE: Form the connection between hub and the nodes. We can put
 		//all that info to the config later, but for now, just use direct
@@ -30,43 +29,43 @@ public class SeleniumGrid_Distributed_Driver implements Distributed_Driver {
 //		configureNodes();
 	}
 
-	@Override
-	public void getRunConfig() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void executeTestSuites() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void rerunFailures() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void createReportArchive() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void uploadReportToCloud() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void sendEmail() {
-		// TODO Auto-generated method stub
-		
-	}
+//	@Override
+//	public void getRunConfig() {
+//		// TODO Auto-generated method stub
+//		
+//	}
+//
+//	@Override
+//	public void executeTestSuites() {
+//		// TODO Auto-generated method stub
+//		
+//	}
+//
+//	@Override
+//	public void rerunFailures() {
+//		// TODO Auto-generated method stub
+//		
+//	}
+//
+//	@Override
+//	public void createReportArchive() {
+//		// TODO Auto-generated method stub
+//		
+//	}
+//
+//	@Override
+//	public void uploadReportToCloud() {
+//		// TODO Auto-generated method stub
+//		
+//	}
+//
+//	@Override
+//	public void sendEmail() {
+//		// TODO Auto-generated method stub
+//		
+//	}
 	
-	private void configureHub() {
+	private static void configureHub() {
 		GridHubConfiguration config = new GridHubConfiguration();
 		config.setHost("10.32.14.13");
 		config.setPort(4444);
@@ -121,11 +120,11 @@ public class SeleniumGrid_Distributed_Driver implements Distributed_Driver {
 		remote.startRegistrationProcess();
 	}
 	
-	private void configureNodes() {
-		
-	}
+//	private void configureNodes() {
+//		
+//	}
 	
-	public void main(String[] args) {
+	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		readyMasterSlaves();
 //		getRunConfig();
