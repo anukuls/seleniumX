@@ -27,7 +27,7 @@ public class SeleniumGrid_Distributed_Driver implements Distributed_Driver {
 		//all that info to the config later, but for now, just use direct
 		//hardcoded stuff for the POC
 		configureHub();
-		configureNodes();
+//		configureNodes();
 	}
 
 	@Override
@@ -128,12 +128,12 @@ public class SeleniumGrid_Distributed_Driver implements Distributed_Driver {
 	public void main(String[] args) {
 		// TODO Auto-generated method stub
 		readyMasterSlaves();
-		getRunConfig();
-		executeTestSuites();
-		rerunFailures();
-		createReportArchive();
-		uploadReportToCloud();
-		sendEmail();
+//		getRunConfig();
+//		executeTestSuites();
+//		rerunFailures();
+//		createReportArchive();
+//		uploadReportToCloud();
+//		sendEmail();
 	}
 
 }
