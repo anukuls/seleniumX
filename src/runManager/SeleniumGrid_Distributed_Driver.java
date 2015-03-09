@@ -2,10 +2,13 @@ package runManager;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+
+import utility.Properties_Utils;
 
 import org.ini4j.Reg;
 import org.openqa.grid.common.GridRole;
@@ -24,29 +27,47 @@ public class SeleniumGrid_Distributed_Driver {
 
 	public static void readyMasterSlaves() {
 		// TODO Auto-generated method stub
-		//NOTE: Form the connection between hub and the nodes. We can put
-		//all that info to the config later, but for now, just use direct
-		//hardcoded stuff for the POC
+		String ipAddress = getSystemIPAddress();
 		
-		String ipAddress = null;
+		//NOTE: Read hub and node information from config
+		String workingDir = System.getProperty("user.dir");
+		String path = workingDir+"\\src\\config\\grid.properties";
+		String hub_ip = Properties_Utils.get_property(path,"hub");
+		//Store the nodes in grid.properties as comma separated values, e.g.
+		//nodes=10.32.14.14,10.32.14.15. Split the combined string, and iterate 
+		//through the array, and configure nodes on respective systems accordingly
+		
+		//TODO: Configure node ports in the properties file as well
+		String node_ips = Properties_Utils.get_property(path, "nodes");
+		
+		if(ipAddress == hub_ip) {
+			System.out.println("I am the hub...!!");
+			configureHub(hub_ip);
+		}
+		else if(ipAddress == node_ips)
+		{
+			System.out.println("I am the node...!!");
+			configureNodes(hub_ip, node_ips, 5555);
+		}
+		else
+		{
+			System.out.println("I am a nobody :( ...!!");
+		}
+				
+	}
+
+	private static String getSystemIPAddress() {
+		// TODO Auto-generated method stub
+		String ipAddr = null;
 		try {
 			InetAddress addr = InetAddress.getLocalHost();
-			ipAddress = addr.getHostAddress();
-			System.out.println(ipAddress);
+			ipAddr = addr.getHostAddress();
+			System.out.println(ipAddr);
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		//NOTE: Read hub and node information from config
-		if(ipAddress == "10.32.14.13") {
-			configureHub();
-		}
-		else
-		{
-			configureNodes();
-		}
-				
+		return ipAddr;
 	}
 
 //	@Override
@@ -85,9 +106,9 @@ public class SeleniumGrid_Distributed_Driver {
 //		
 //	}
 	
-	private static void configureHub() {
+	private static void configureHub(String hubIP) {
 		GridHubConfiguration config = new GridHubConfiguration();
-		config.setHost("10.32.14.13");
+		config.setHost(hubIP);
 		config.setPort(4444);
 		Hub hub = new Hub(config);
 		try {
@@ -99,7 +120,7 @@ public class SeleniumGrid_Distributed_Driver {
 	}
 	
 	//NOTE: Pass the hub object as argument to this method
-	private static void configureNodes() {
+	private static void configureNodes(String hubIP, String nodeIP, int nodePort) {
 		RegistrationRequest req = new RegistrationRequest();
 		req.setRole(GridRole.NODE);
 		
@@ -112,14 +133,14 @@ public class SeleniumGrid_Distributed_Driver {
 		
 		Map<String, Object> nodeConfiguration = new HashMap<String,Object>();
 		nodeConfiguration.put(RegistrationRequest.AUTO_REGISTER, true);
-		nodeConfiguration.put(RegistrationRequest.HUB_HOST, "10.32.14.13");
+		nodeConfiguration.put(RegistrationRequest.HUB_HOST, hubIP);
 		nodeConfiguration.put(RegistrationRequest.HUB_PORT, 4444);
-		nodeConfiguration.put(RegistrationRequest.PORT, 5555);
+		nodeConfiguration.put(RegistrationRequest.PORT, nodePort);
 		
 		URL remoteURL = null;
 		try {
-//			remoteURL = new URL("http://" + hub.getHost() + ":" + 5555);
-			remoteURL = new URL("http://10.32.14.14:5555");			
+			remoteURL = new URL("http://" + nodeIP + ":" + nodePort);
+//			remoteURL = new URL("http://10.32.14.14:5555");			
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
