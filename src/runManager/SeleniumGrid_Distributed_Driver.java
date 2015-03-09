@@ -4,6 +4,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import org.ini4j.Reg;
 import org.openqa.grid.common.GridRole;
@@ -25,8 +27,26 @@ public class SeleniumGrid_Distributed_Driver {
 		//NOTE: Form the connection between hub and the nodes. We can put
 		//all that info to the config later, but for now, just use direct
 		//hardcoded stuff for the POC
-		configureHub();
-//		configureNodes();
+		
+		String ipAddress = null;
+		try {
+			InetAddress addr = InetAddress.getLocalHost();
+			ipAddress = addr.getHostAddress();
+			System.out.println(ipAddress);
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		//NOTE: Read hub and node information from config
+		if(ipAddress == "10.32.14.13") {
+			configureHub();
+		}
+		else
+		{
+			configureNodes();
+		}
+				
 	}
 
 //	@Override
@@ -75,8 +95,11 @@ public class SeleniumGrid_Distributed_Driver {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		
+		}		
+	}
+	
+	//NOTE: Pass the hub object as argument to this method
+	private static void configureNodes() {
 		RegistrationRequest req = new RegistrationRequest();
 		req.setRole(GridRole.NODE);
 		
@@ -89,8 +112,8 @@ public class SeleniumGrid_Distributed_Driver {
 		
 		Map<String, Object> nodeConfiguration = new HashMap<String,Object>();
 		nodeConfiguration.put(RegistrationRequest.AUTO_REGISTER, true);
-		nodeConfiguration.put(RegistrationRequest.HUB_HOST, hub.getHost());
-		nodeConfiguration.put(RegistrationRequest.HUB_PORT, hub.getPort());
+		nodeConfiguration.put(RegistrationRequest.HUB_HOST, "10.32.14.13");
+		nodeConfiguration.put(RegistrationRequest.HUB_PORT, 4444);
 		nodeConfiguration.put(RegistrationRequest.PORT, 5555);
 		
 		URL remoteURL = null;
@@ -120,10 +143,6 @@ public class SeleniumGrid_Distributed_Driver {
 		
 		remote.startRegistrationProcess();
 	}
-	
-//	private void configureNodes() {
-//		
-//	}
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
