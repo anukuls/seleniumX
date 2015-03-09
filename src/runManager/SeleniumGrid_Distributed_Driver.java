@@ -23,9 +23,10 @@ import org.openqa.selenium.firefox.internal.ProfilesIni;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 
-public class SeleniumGrid_Distributed_Driver {
+public class SeleniumGrid_Distributed_Driver implements Distributed_Driver {
 
-	public static void readyMasterSlaves() {
+	@Override
+	public void readyMasterSlaves() {
 		// TODO Auto-generated method stub
 		String ipAddress = getSystemIPAddress();
 		
@@ -70,41 +71,41 @@ public class SeleniumGrid_Distributed_Driver {
 		return ipAddr;
 	}
 
-//	@Override
-//	public void getRunConfig() {
-//		// TODO Auto-generated method stub
-//		
-//	}
-//
-//	@Override
-//	public void executeTestSuites() {
-//		// TODO Auto-generated method stub
-//		
-//	}
-//
-//	@Override
-//	public void rerunFailures() {
-//		// TODO Auto-generated method stub
-//		
-//	}
-//
-//	@Override
-//	public void createReportArchive() {
-//		// TODO Auto-generated method stub
-//		
-//	}
-//
-//	@Override
-//	public void uploadReportToCloud() {
-//		// TODO Auto-generated method stub
-//		
-//	}
-//
-//	@Override
-//	public void sendEmail() {
-//		// TODO Auto-generated method stub
-//		
-//	}
+	@Override
+	public void getRunConfig() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void executeTestSuites() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void rerunFailures() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void createReportArchive() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void uploadReportToCloud() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void sendEmail() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	private static void configureHub(String hubIP) {
 		GridHubConfiguration config = new GridHubConfiguration();
@@ -167,7 +168,8 @@ public class SeleniumGrid_Distributed_Driver {
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		readyMasterSlaves();
+		SeleniumGrid_Distributed_Driver grid = new SeleniumGrid_Distributed_Driver();
+		grid.readyMasterSlaves();
 //		getRunConfig();
 //		executeTestSuites();
 //		rerunFailures();
