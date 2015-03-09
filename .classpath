@@ -55,5 +55,7 @@
 	<classpathentry kind="lib" path="lib/selenium-2.44.0/libs/xml-apis-1.4.01.jar"/>
 	<classpathentry kind="lib" path="D:/AnukulNew/jars/activation.jar"/>
 	<classpathentry kind="lib" path="D:/AnukulNew/jars/javax.mail.jar"/>
+	<classpathentry kind="lib" path="C:/SikuliX/sikuli-java.jar"/>
+	<classpathentry kind="lib" path="D:/AnukulNew/jars/selenium-2.44.0/selenium-server-standalone-2.44.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

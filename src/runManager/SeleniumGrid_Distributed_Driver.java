@@ -95,7 +95,8 @@ public class SeleniumGrid_Distributed_Driver {
 		
 		URL remoteURL = null;
 		try {
-			remoteURL = new URL("http://" + hub.getHost() + ":" + 5555);
+//			remoteURL = new URL("http://" + hub.getHost() + ":" + 5555);
+			remoteURL = new URL("http://10.32.14.14:5555");			
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
