@@ -4,6 +4,9 @@ package automationManager;
 //import javax.mail.internet.AddressException;
 import javax.swing.*;
 
+import org.openqa.grid.internal.utils.SelfRegisteringRemote;
+import org.openqa.grid.web.Hub;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.GridLayout;
@@ -14,14 +17,23 @@ import java.util.HashMap;
 
 import utility.Read_Files;
 import runManager.Base_Driver;
+import runManager.SeleniumGrid_Distributed_Driver;
 
 public class Automation_Manager_UI extends JPanel implements ItemListener { 
 	
 	JPanel jp = new JPanel();
 	JCheckBox suite1;
 	JButton btn;
+	JButton hubBtn;
+	JButton nodeBtn;
 	JLabel lbl;
 	JLabel lbl1;
+	JLabel lbl2;
+	JLabel hubLabel;
+	JLabel nodeLabel;
+	JRadioButton radio1;
+	JRadioButton radio2;
+	ButtonGroup bg;
 	JTextField jtf;
 	
 	ArrayList<String> suitesArr;
@@ -36,16 +48,126 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 		System.out.println(suitesArr);
 		
 		jp.setLayout(new GridLayout(15,50));
-		lbl = new JLabel("Welcome to the Automation Manager.  Please select the suites to be executed");
+		lbl = new JLabel("Welcome to the Automation Manager.  Please choose the mode of execution");
 		jp.add(lbl);
 		
-		//TODO: add stuff for checkbox logic
-		initUI();
+		radio1 = new JRadioButton("Single Machine Mode");
+		radio2 = new JRadioButton("Multi Machine Mode");
+		bg = new ButtonGroup();
+		bg.add(radio1);
+		bg.add(radio2);
+		jp.add(radio1);
 		
 		setLayout(new BorderLayout());
         add(jp, BorderLayout.WEST);
         add(jp, BorderLayout.CENTER);
         setBorder(BorderFactory.createEmptyBorder(40,40,40,40));
+		
+		radio1.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				// TODO Auto-generated method stub
+				lbl2 = new JLabel();
+				if(e.getStateChange() == 1) 
+				{
+					lbl2.setText("Choose Scripts to execute");
+					jp.add(lbl2);
+					jp.revalidate();
+					jp.repaint();
+				}
+				
+				System.out.println("Single mode radio state is: " + e.getStateChange());
+				
+				JRadioButton rad = (JRadioButton)e.getSource();
+				if(rad.isSelected()) {
+					initUI();
+				}				
+			}
+			
+		});
+		
+		
+		jp.add(radio2);
+		radio2.addItemListener(new ItemListener() {
+			JButton hubBtn = new JButton("Start Hub");
+			JButton nodeBtn = new JButton("Register Node");
+			Hub hub;
+			SelfRegisteringRemote remote;
+			SeleniumGrid_Distributed_Driver driver = new SeleniumGrid_Distributed_Driver();
+			
+			@Override			
+			public void itemStateChanged(ItemEvent e) {
+				// TODO Auto-generated method stub
+//				initUI();
+				hubLabel = new JLabel();
+				nodeLabel = new JLabel();
+				
+				if(driver.isHub() && e.getStateChange() == 1) 
+				{
+					hubLabel.setText("I am the hub...Start me!!");
+					jp.add(hubLabel);
+					jp.add(hubBtn);
+					hubBtn.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							if(hubBtn.getText().equals("Start Hub"))
+							{
+								hub = driver.startHub();
+								hubLabel.setText("Hub successfully started.  Register nodes with me!!!");
+								hubBtn.setText("Stop Hub");
+							}
+							else
+							{
+								driver.stopHub(hub);
+								hubLabel.setText("Hub successfully stopped.  Feel free to start me again!!!");
+								hubBtn.setText("Start Hub");
+							}							
+						}
+					});
+					jp.revalidate();
+					jp.repaint();
+				}
+				else if(driver.isNode() && e.getStateChange() == 1)
+				{
+					nodeLabel.setText("I am the node...Register me with the hub!!");
+					jp.add(nodeLabel);
+					jp.add(nodeBtn);
+					nodeBtn.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							if(nodeBtn.getText().equals("Register Node"))
+							{
+								remote = driver.registerNode();
+								nodeLabel.setText("Node successfully registered with hub!!!");
+								nodeBtn.setText("Unregister Node");
+							}
+							else
+							{
+								driver.unregisterNode(remote);
+								nodeLabel.setText("Node successfully unregistered with hub..Register again to run your tests!!!");
+								nodeBtn.setText("Register Node");
+							}							
+						}
+					});
+					jp.revalidate();
+					jp.repaint();
+				}	
+			}
+			
+		});
+		//TODO: 1. Provide radio option for single machine mode or grid mode
+		//2. If single machine mode chosen, call initUI, and let the base driver take its seat
+		//3. If multi mode chosen, do not call initUI, determine from config whether machine under execution is a hub or a node
+		//4. If hub, present a message and a button saying I am a HUB, start me.  Also, present message saying register nodes with this hub
+		//5. Logon to the node machines, invoke the automation manager. Choose multi mode, and register nodes with the hub
+		//6. Once registration is complete, invoke the initUI method to select the scripts
+		//7. On press of execute, start executing scripts on the nodes specified in the scripts. Pick that information from another config file
+		
+		
+		
+		
 	}
 	
 	public void initUI() {

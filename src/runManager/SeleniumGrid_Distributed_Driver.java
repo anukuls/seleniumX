@@ -2,7 +2,7 @@ package runManager;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
+//import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.net.InetAddress;
@@ -24,36 +24,116 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 
 public class SeleniumGrid_Distributed_Driver implements Distributed_Driver {
-
-	@Override
-	public void readyMasterSlaves() {
-		// TODO Auto-generated method stub
+	
+	public boolean isHub() {
+		boolean hub_flag = false;
+		
 		String ipAddress = getSystemIPAddress();
 		
 		//NOTE: Read hub and node information from config
 		String workingDir = System.getProperty("user.dir");
 		String path = workingDir+"\\src\\config\\grid.properties";
 		String hub_ip = Properties_Utils.get_property(path,"hub");
+		
+		if(ipAddress.equals(hub_ip)) {
+			hub_flag = true;
+			System.out.println("I am the hub...!!");
+		}
+		else
+		{
+			System.out.println("I am not the hub...!!");
+		}
+		
+		return hub_flag;
+	}
+	
+	public boolean isNode() {
+		boolean node_flag = false;
+		
+		String ipAddress = getSystemIPAddress();
+		
+		//NOTE: Read hub and node information from config
+		String workingDir = System.getProperty("user.dir");
+		String path = workingDir+"\\src\\config\\grid.properties";
+		
+		String node_ips = Properties_Utils.get_property(path, "nodes");
+		
+		if(ipAddress.equals(node_ips)) {
+			node_flag = true;
+			System.out.println("I am the node...!!");
+		}
+		else
+		{
+			System.out.println("I am not the node...!!");
+		}
+		
+		return node_flag;
+	}
+	
+	public Hub startHub() {
+		//NOTE: Read hub and node information from config
+		String workingDir = System.getProperty("user.dir");
+		String path = workingDir+"\\src\\config\\grid.properties";
+		String hub_ip = Properties_Utils.get_property(path,"hub");
+		Hub hub = configureHub(hub_ip);
+		return hub;
+	}
+	
+	public void stopHub(Hub hub) {
+		//NOTE: Read hub and node information from config
+//		String workingDir = System.getProperty("user.dir");
+//		String path = workingDir+"\\src\\config\\grid.properties";
+//		String hub_ip = Properties_Utils.get_property(path,"hub");
+		try {
+			hub.stop();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public SelfRegisteringRemote registerNode() {
+		String workingDir = System.getProperty("user.dir");
+		String path = workingDir+"\\src\\config\\grid.properties";
+		String hub_ip = Properties_Utils.get_property(path,"hub");
+		String node_ip = Properties_Utils.get_property(path, "nodes");
+		SelfRegisteringRemote remote = configureNodes(hub_ip, node_ip, 5555);
+		return remote;
+	}
+	
+	public void unregisterNode(SelfRegisteringRemote remote) {
+		try {
+			remote.stopRemoteServer();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public void readyMasterSlaves() {
+		// TODO Auto-generated method stub
+		
 		//Store the nodes in grid.properties as comma separated values, e.g.
 		//nodes=10.32.14.14,10.32.14.15. Split the combined string, and iterate 
 		//through the array, and configure nodes on respective systems accordingly
 		
 		//TODO: Configure node ports in the properties file as well
-		String node_ips = Properties_Utils.get_property(path, "nodes");
-		
-		if(ipAddress == hub_ip) {
-			System.out.println("I am the hub...!!");
-			configureHub(hub_ip);
-		}
-		else if(ipAddress == node_ips)
-		{
-			System.out.println("I am the node...!!");
-			configureNodes(hub_ip, node_ips, 5555);
-		}
-		else
-		{
-			System.out.println("I am a nobody :( ...!!");
-		}
+//		String node_ips = Properties_Utils.get_property(path, "nodes");
+//		
+//		if(ipAddress == hub_ip) {
+//			System.out.println("I am the hub...!!");
+//			configureHub(hub_ip);
+//		}
+//		else if(ipAddress == node_ips)
+//		{
+//			System.out.println("I am the node...!!");
+//			configureNodes(hub_ip, node_ips, 5555);
+//		}
+//		else
+//		{
+//			System.out.println("I am a nobody :( ...!!");
+//		}
 				
 	}
 
@@ -107,7 +187,7 @@ public class SeleniumGrid_Distributed_Driver implements Distributed_Driver {
 		
 	}
 	
-	private static void configureHub(String hubIP) {
+	private static Hub configureHub(String hubIP) {
 		GridHubConfiguration config = new GridHubConfiguration();
 		config.setHost(hubIP);
 		config.setPort(4444);
@@ -118,10 +198,11 @@ public class SeleniumGrid_Distributed_Driver implements Distributed_Driver {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		
+		return hub;
 	}
 	
 	//NOTE: Pass the hub object as argument to this method
-	private static void configureNodes(String hubIP, String nodeIP, int nodePort) {
+	private static SelfRegisteringRemote configureNodes(String hubIP, String nodeIP, int nodePort) {
 		RegistrationRequest req = new RegistrationRequest();
 		req.setRole(GridRole.NODE);
 		
@@ -164,6 +245,7 @@ public class SeleniumGrid_Distributed_Driver implements Distributed_Driver {
 		}
 		
 		remote.startRegistrationProcess();
+		return remote;
 	}
 	
 	public static void main(String[] args) {
