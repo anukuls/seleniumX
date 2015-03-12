@@ -49,6 +49,7 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 		
 		jp.setLayout(new GridLayout(15,50));
 		lbl = new JLabel("Welcome to the Automation Manager.  Please choose the mode of execution");
+		lbl2 = new JLabel();
 		jp.add(lbl);
 		
 		radio1 = new JRadioButton("Single Machine Mode");
@@ -67,7 +68,6 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				// TODO Auto-generated method stub
-				lbl2 = new JLabel();
 				if(e.getStateChange() == 1) 
 				{
 					lbl2.setText("Choose Scripts to execute");
@@ -107,6 +107,7 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 					hubLabel.setText("I am the hub...Start me!!");
 					jp.add(hubLabel);
 					jp.add(hubBtn);
+					hubBtn.setName("Start Hub");
 					hubBtn.addActionListener(new ActionListener() {
 						
 						@Override
@@ -116,12 +117,20 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 								hub = driver.startHub();
 								hubLabel.setText("Hub successfully started.  Register nodes with me!!!");
 								hubBtn.setText("Stop Hub");
+								hubBtn.setName("Stop Hub");
+								//TODO: First wait for nodes to register with hub, and then present scripts to be executed
+								lbl2.setText("Choose Scripts to execute");
+								jp.add(lbl2);
+								jp.revalidate();
+								jp.repaint();
+								initUI();
 							}
 							else
 							{
 								driver.stopHub(hub);
 								hubLabel.setText("Hub successfully stopped.  Feel free to start me again!!!");
 								hubBtn.setText("Start Hub");
+								hubBtn.setName("Start Hub");
 							}							
 						}
 					});
@@ -133,6 +142,7 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 					nodeLabel.setText("I am the node...Register me with the hub!!");
 					jp.add(nodeLabel);
 					jp.add(nodeBtn);
+					nodeBtn.setName("Register Node");
 					nodeBtn.addActionListener(new ActionListener() {
 						
 						@Override
@@ -142,12 +152,14 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 								remote = driver.registerNode();
 								nodeLabel.setText("Node successfully registered with hub!!!");
 								nodeBtn.setText("Unregister Node");
+								nodeBtn.setName("Unregister Node");
 							}
 							else
 							{
 								driver.unregisterNode(remote);
 								nodeLabel.setText("Node successfully unregistered with hub..Register again to run your tests!!!");
 								nodeBtn.setText("Register Node");
+								nodeBtn.setName("Register Node");
 							}							
 						}
 					});
@@ -157,11 +169,11 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 			}
 			
 		});
-		//TODO: 1. Provide radio option for single machine mode or grid mode
-		//2. If single machine mode chosen, call initUI, and let the base driver take its seat
-		//3. If multi mode chosen, do not call initUI, determine from config whether machine under execution is a hub or a node
-		//4. If hub, present a message and a button saying I am a HUB, start me.  Also, present message saying register nodes with this hub
-		//5. Logon to the node machines, invoke the automation manager. Choose multi mode, and register nodes with the hub
+		//TODO: 1. Provide radio option for single machine mode or grid mode - done
+		//2. If single machine mode chosen, call initUI, and let the base driver take its seat - done
+		//3. If multi mode chosen, do not call initUI, determine from config whether machine under execution is a hub or a node - done
+		//4. If hub, present a message and a button saying I am a HUB, start me.  Also, present message saying register nodes with this hub - done
+		//5. Logon to the node machines, invoke the automation manager. Choose multi mode, and register nodes with the hub - done
 		//6. Once registration is complete, invoke the initUI method to select the scripts
 		//7. On press of execute, start executing scripts on the nodes specified in the scripts. Pick that information from another config file
 		
@@ -186,7 +198,9 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 		Component[] cmps = jp.getComponents();
 		for (Component cmp : cmps) {
 			System.out.println(cmp.getClass().toString());
-			if (cmp.getClass().toString().equals("class javax.swing.JButton")) {
+			System.out.println(cmp.getName());
+			
+			if (cmp.getClass().toString().equals("class javax.swing.JButton") && cmp.getName().toString().equals("Execute")) {
 				jp.remove(cmp);
 			}
 			else
@@ -246,6 +260,7 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 				cbox = (JCheckBox)cmp;
 				if (cbox.isSelected()) {
 					btn = new JButton("Execute");
+					btn.setName("Execute");
 					jp.add(btn);
 					btn.addActionListener(new ActionListener() {
 						
