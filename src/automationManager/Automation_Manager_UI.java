@@ -131,6 +131,7 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 								hubLabel.setText("Hub successfully stopped.  Feel free to start me again!!!");
 								hubBtn.setText("Start Hub");
 								hubBtn.setName("Start Hub");
+								//TODO: On stopping hub, remove checkboxes for label - "Choose scripts to execute"
 							}							
 						}
 					});
