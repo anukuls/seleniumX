@@ -29,7 +29,7 @@ public class Grid_Stub implements Testcase {
 		Log.initializeLog();
 		Log.startTC();
 
-		String node = "http://10.13.14.14:5555/wd/hub";
+		String node = "http://10.13.14.15:5555/wd/hub";
 		DesiredCapabilities cap = DesiredCapabilities.firefox();
 		cap.setBrowserName("firefox");
 		
