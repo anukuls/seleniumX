@@ -6,7 +6,7 @@ public interface Distributed_Driver {
 	
 	public void getRunConfig();
 	
-	public void executeTestSuites();
+	public void executeTestSuites(String run_config);
 	
 	public void rerunFailures();
 	

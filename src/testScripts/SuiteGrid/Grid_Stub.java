@@ -1,12 +1,14 @@
 package testScripts.SuiteGrid;
 
-import org.openqa.selenium.*;
+//import org.openqa.selenium.*;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
+//import org.testng.annotations.AfterTest;
+//import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.AfterMethod;
 
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
@@ -14,34 +16,47 @@ import java.net.MalformedURLException;
 
 import org.openqa.selenium.WebDriver;
 
-import utility.Common_Actions;
+//import utility.Common_Actions;
 
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.AfterMethod;
-
-import projectModule.Login_Action;
+//import projectModule.Login_Action;
 import runManager.Testcase;
 import utility.Log;
 
-public class Grid_Stub implements Testcase {
+public class Grid_Stub {
 	
 	//Instance variable driver created to use this across all methods
 	public WebDriver driver;
+	public DesiredCapabilities cap;
 	public String URL, Node;
     protected ThreadLocal<RemoteWebDriver> threadDriver = null;
 
-	@Parameters("browser")
+	@Parameters({"browser","port","node"})
 	@BeforeMethod
-	public void preScript() throws MalformedURLException {
+	public void preScript(String browser, String port, String node) throws MalformedURLException {
 		//Initialize Logger
 		Log.initializeLog();
 		Log.startTC();
 
 		String URL = "http://www.google.com";
 		System.out.println(" Executing on FireFox");
-        String Node = "http://10.32.14.15:5555/wd/hub";
-        DesiredCapabilities cap = DesiredCapabilities.firefox();
-        cap.setBrowserName("firefox");
+		
+		//TODO: Node url to be formed at runtime, this information would be read from the @Parameters tag of the testng.xml
+//        String Node = "http://10.32.14.15:5555/wd/hub";
+        String Node = "http://" + node + ":" + port + "/wd/hub";
+        System.out.println("Node URL is: " + Node);
+        System.out.println("Browser of execution is: " + browser);
+        
+        if(browser.equals("firefox")) 
+        {
+        	DesiredCapabilities cap = DesiredCapabilities.firefox();        	
+        }
+        else
+        {
+        	DesiredCapabilities cap = DesiredCapabilities.chrome();
+        }
+        
+//        cap.setBrowserName("firefox");
+        cap.setBrowserName(browser);
         
         driver = new RemoteWebDriver(new URL(Node), cap);
         // Puts an Implicit wait, Will wait for 10 seconds before throwing exception
@@ -56,7 +71,7 @@ public class Grid_Stub implements Testcase {
 	public void main() throws Exception {
 		// TODO Auto-generated method stub
 		Log.info("executing main logic...");
-		
+		driver.get("http://www.yahoo.com");
 	}
 
 	@AfterMethod

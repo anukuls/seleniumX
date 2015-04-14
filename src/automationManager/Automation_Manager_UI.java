@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.HashMap;
 
 import utility.Read_Files;
+import utility.Properties_Utils;
 import runManager.Base_Driver;
 import runManager.SeleniumGrid_Distributed_Driver;
 
@@ -42,6 +43,8 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 //	HashMap<String, String[]> suites_hash = new HashMap<String, String[]>();
 	HashMap<String, ArrayList<String>> suites_hash = new HashMap<String, ArrayList<String>>();
 	ArrayList<String> checked_scripts = new ArrayList<String>();
+	
+	SeleniumGrid_Distributed_Driver driver = new SeleniumGrid_Distributed_Driver();
 	
 	public Automation_Manager_UI() {
 		suitesArr = Read_Files.readDir();
@@ -93,7 +96,6 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 			JButton nodeBtn = new JButton("Register Node");
 			Hub hub;
 			SelfRegisteringRemote remote;
-			SeleniumGrid_Distributed_Driver driver = new SeleniumGrid_Distributed_Driver();
 			
 			@Override			
 			public void itemStateChanged(ItemEvent e) {
@@ -119,11 +121,20 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 								hubBtn.setText("Stop Hub");
 								hubBtn.setName("Stop Hub");
 								//TODO: First wait for nodes to register with hub, and then present scripts to be executed
-								lbl2.setText("Choose Scripts to execute");
-								jp.add(lbl2);
-								jp.revalidate();
-								jp.repaint();
-								initUI();
+								//TODO: After the node registers with hub, present a button to launch the scripts in remote mode based 
+								//on the configuration defined in runConfig.properties, rather than giving user option to select which 
+								//script to execute.  This is because there might be a lot of scripts and user wont have the time to select 
+								//which script to be run on which machine.  Script selection is fine when running in Base Driver mode on a single
+								//machine.  So, do not call initUI method, rather implement a method which triggers run based on config defined
+								//in runConfig.properties on each of the defined nodes.
+//								lbl2.setText("Choose Scripts to execute");
+//								jp.add(lbl2);
+//								jp.revalidate();
+//								jp.repaint();
+//								initUI();
+								
+								//TODO: Show the batch script execute button only when determined that nodes are registered with hub
+								executeBatchScripts();
 							}
 							else
 							{
@@ -177,10 +188,6 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 		//5. Logon to the node machines, invoke the automation manager. Choose multi mode, and register nodes with the hub - done
 		//6. Once registration is complete, invoke the initUI method to select the scripts
 		//7. On press of execute, start executing scripts on the nodes specified in the scripts. Pick that information from another config file
-		
-		
-		
-		
 	}
 	
 	public void initUI() {
@@ -221,6 +228,48 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 				jp.remove(cmp);
 			}
 		}
+	}
+	
+	public void executeBatchScripts() {
+		JLabel batchLabel = new JLabel();
+		JButton batchBtn = new JButton();
+		batchBtn.setName("batchButton");
+		jp.add(batchLabel);
+		batchLabel.setText("Execute batch scripts..");
+		jp.add(batchBtn);
+		batchBtn.addActionListener(new ActionListener() {
+						
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String workingDir = System.getProperty("user.dir");
+			    final String runConfigPath = workingDir+"\\src\\config\\runConfig.properties";
+			    
+			    //TODO: Form a testng.xml in SeleniumGrid_Distributed_Driver.java file such as this:
+			    //			<suite name="Selenium TestNG Suite" parallel="tests" thread-count="5">
+				//
+				//			    <test name="Selenium TestNG - 1">
+				//			        <parameter name="browser" value="firefox" />
+				//			        <parameter name="port" value="5555" />
+				//					<parameter name="node" value="10.32.14.14">
+				//			        <classes>
+				//			            <class name="com.test.testng.Google" />
+				//			        </classes>
+				//			    </test>
+				//				
+				//			    <test name="Selenium TestNG - 2">
+				//			        <parameter name="browser" value="chrome" />
+				//			        <parameter name="port" value="6666" />
+				//					<parameter name="node" value="10.32.14.15">
+				//			        <classes>
+				//			            <class name="com.test.testng.Google" />
+				//			        </classes>
+				//			    </test>
+				//
+				//			</suite>
+			    driver.main(runConfigPath);
+			    //TODO: Do the above by calling the main method of SeleniumGrid_Distributed_Driver class (just like we call Base_Driver.main for single run mode)
+			}
+		});
 	}
 	
 	public HashMap<String,ArrayList<String>> getSuiteScriptHash() {

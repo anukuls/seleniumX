@@ -9,7 +9,9 @@ import org.testng.TestNG;
 import org.testng.xml.XmlClass;
 import org.testng.xml.XmlSuite;
 import org.testng.xml.XmlTest;
+
 import utility.Custom_Reporter;
+
 //import javax.mail.*;
 //import javax.mail.internet.*;
 //import javax.activation.*;
@@ -43,6 +45,11 @@ public class Base_Driver {
 			//Create an instance of XmlTest and assign a name for it.
 			XmlTest myTest = new XmlTest(mySuite);
 			myTest.setName(suite);
+			
+			Map<String,String> testngParams = new HashMap<String,String> ();
+			//TODO: Pick the browser param from a separate config file for Base Driver, name it base_driver_config.properties
+			testngParams.put("browser", "firefox");
+			myTest.setParameters(testngParams);
 			
 			//<suite>
 			//   <test>

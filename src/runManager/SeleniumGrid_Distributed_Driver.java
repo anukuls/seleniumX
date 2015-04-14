@@ -2,9 +2,12 @@ package runManager;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 //import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -21,6 +24,10 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.firefox.internal.ProfilesIni;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.testng.TestNG;
+import org.testng.xml.XmlClass;
+import org.testng.xml.XmlSuite;
+import org.testng.xml.XmlTest;
 
 
 public class SeleniumGrid_Distributed_Driver implements Distributed_Driver {
@@ -150,6 +157,130 @@ public class SeleniumGrid_Distributed_Driver implements Distributed_Driver {
 		}
 		return ipAddr;
 	}
+	
+	
+	//	<suite name="Selenium TestNG Suite" parallel="tests" thread-count="5">
+	//
+	//			    <test name="Selenium TestNG - 1">
+	//			        <parameter name="browser" value="firefox" />
+	//			        <parameter name="port" value="5555" />
+	//					<parameter name="node" value="10.32.14.14">
+	//			        <classes>
+	//			            <class name="com.test.testng.Google" />
+	//			        </classes>
+	//			    </test>
+	//				
+	//			    <test name="Selenium TestNG - 2">
+	//			        <parameter name="browser" value="chrome" />
+	//			        <parameter name="port" value="6666" />
+	//					<parameter name="node" value="10.32.14.15">
+	//			        <classes>
+	//			            <class name="com.test.testng.Google" />
+	//			        </classes>
+	//			    </test>
+	//
+    //  </suite>
+	public TestNG createDistributedTestNGXML(String run_config_path) {
+		
+		System.out.println(run_config_path);
+		
+		//Create an instance on TestNG
+		TestNG myTestNG = new TestNG();
+		
+		//Create an instance of XML Suite and assign a name for it.
+		XmlSuite mySuite = new XmlSuite();
+		mySuite.setName("Distributed Test Suites");
+		
+		//<suite>
+		
+		//Create a list of XmlTests and add the Xmltest you created earlier to it.
+		List<XmlTest> myTests = new ArrayList<XmlTest>();
+		
+		//In distributed mode, we will iterate on the node_ips, and put the scripts as class tags
+		Set<Object> node_ips = Properties_Utils.get_property_keySet(run_config_path);
+		
+		for (Object node_ip:node_ips) {
+			
+			String ip = (String)node_ip;
+			
+			//Create an instance of XmlTest and assign a name for it.
+			XmlTest myTest = new XmlTest(mySuite);
+			myTest.setName(ip);
+			
+			//<suite>
+			//   <test name="10.32.14.14">
+			
+			//Add params like browser, port and node ip
+			Map<String,String> testngParams = new HashMap<String,String> ();
+			//TODO: Pick browser info from another config file, name it grid_driver_config.properties
+			testngParams.put("browser", "firefox");
+			testngParams.put("port", "5555");
+			testngParams.put("node", ip);
+			myTest.setParameters(testngParams);
+			
+			//			<suite name="Selenium TestNG Suite" parallel="tests" thread-count="5">
+			//
+			//			    <test name="Selenium TestNG - 1">
+			//			        <parameter name="browser" value="firefox" />
+			//			        <parameter name="port" value="5555" />
+			//					<parameter name="node" value="10.32.14.14">
+			
+			List<XmlClass> myClasses = new ArrayList<XmlClass>();
+			String script_list = Properties_Utils.get_property(run_config_path, ip);
+			
+			String[] scripts = script_list.split(",");
+			for (String script : scripts) {				
+				//Create a list which can contain the classes that you want to run.				
+				myClasses.add(new XmlClass(script));
+			}
+			
+			//			<suite name="Selenium TestNG Suite" parallel="tests" thread-count="5">
+			//
+			//			    <test name="Selenium TestNG - 1">
+			//			        <parameter name="browser" value="firefox" />
+			//			        <parameter name="port" value="5555" />
+			//					<parameter name="node" value="10.32.14.14">
+			//			        <classes>
+			//			            <class name="com.test.testng.Google" />
+			//			        </classes>
+			
+			//Assign that to the XmlTest Object created earlier.
+			myTest.setXmlClasses(myClasses);
+			
+			myTests.add(myTest);
+			
+			//			<suite name="Selenium TestNG Suite" parallel="tests" thread-count="5">
+			//
+			//			    <test name="Selenium TestNG - 1">
+			//			        <parameter name="browser" value="firefox" />
+			//			        <parameter name="port" value="5555" />
+			//					<parameter name="node" value="10.32.14.14">
+			//			        <classes>
+			//			            <class name="com.test.testng.Google" />
+			//			        </classes>
+			//			    </test>
+			
+		}
+		
+		//add the list of tests to your Suite.
+		mySuite.setTests(myTests);
+		
+		//Add the suite to the list of suites.
+		List<XmlSuite> mySuites = new ArrayList<XmlSuite>();
+		mySuites.add(mySuite);
+		
+		System.out.println(mySuites);
+		
+		List<Class> listenerClass = new ArrayList<Class>();
+		listenerClass.add(utility.Custom_Reporter.class);
+				
+		myTestNG.setListenerClasses(listenerClass);
+				
+		//Set the list of Suites to the testNG object you created earlier.
+		myTestNG.setXmlSuites(mySuites);
+		
+		return myTestNG;
+	}
 
 	@Override
 	public void getRunConfig() {
@@ -158,9 +289,15 @@ public class SeleniumGrid_Distributed_Driver implements Distributed_Driver {
 	}
 
 	@Override
-	public void executeTestSuites() {
+	public void executeTestSuites(String run_config_path) {
 		// TODO Auto-generated method stub
+		//TODO: 1. Objective is to create a distributed testng xml
+		//2. 
 		
+		TestNG myTestNGSuites = createDistributedTestNGXML(run_config_path);		
+		
+		//invoke run() - this will run your testng xml as a total suite.
+		myTestNGSuites.run();		
 	}
 
 	@Override
@@ -248,12 +385,13 @@ public class SeleniumGrid_Distributed_Driver implements Distributed_Driver {
 		return remote;
 	}
 	
-	public static void main(String[] args) {
+	public void main(String run_config_path) {
 		// TODO Auto-generated method stub
 		SeleniumGrid_Distributed_Driver grid = new SeleniumGrid_Distributed_Driver();
-		grid.readyMasterSlaves();
+//		grid.readyMasterSlaves();
+		
 //		getRunConfig();
-//		executeTestSuites();
+		executeTestSuites(run_config_path);
 //		rerunFailures();
 //		createReportArchive();
 //		uploadReportToCloud();
