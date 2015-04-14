@@ -227,9 +227,13 @@ public class SeleniumGrid_Distributed_Driver implements Distributed_Driver {
 			
 			List<XmlClass> myClasses = new ArrayList<XmlClass>();
 			String script_list = Properties_Utils.get_property(run_config_path, ip);
+			System.out.println("Script List is :" + script_list);
 			
 			String[] scripts = script_list.split(",");
+			System.out.println("Script List after split is:" + scripts);
 			for (String script : scripts) {				
+				
+				System.out.println("Script List after split is:" + script);
 				//Create a list which can contain the classes that you want to run.				
 				myClasses.add(new XmlClass(script));
 			}

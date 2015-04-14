@@ -26,7 +26,7 @@ public class Grid_Stub {
 	
 	//Instance variable driver created to use this across all methods
 	public WebDriver driver;
-	public DesiredCapabilities cap;
+//	public DesiredCapabilities cap;
 	public String URL, Node;
     protected ThreadLocal<RemoteWebDriver> threadDriver = null;
 
@@ -46,17 +46,18 @@ public class Grid_Stub {
         System.out.println("Node URL is: " + Node);
         System.out.println("Browser of execution is: " + browser);
         
-        if(browser.equals("firefox")) 
-        {
-        	DesiredCapabilities cap = DesiredCapabilities.firefox();        	
-        }
-        else
-        {
-        	DesiredCapabilities cap = DesiredCapabilities.chrome();
-        }
+//        if(browser.equals("firefox")) 
+//        {
+        	DesiredCapabilities cap = DesiredCapabilities.firefox(); 
+        	cap.setBrowserName(browser);
+//        }
+//        else
+//        {
+//        	DesiredCapabilities cap = DesiredCapabilities.chrome();
+//        }
         
 //        cap.setBrowserName("firefox");
-        cap.setBrowserName(browser);
+        
         
         driver = new RemoteWebDriver(new URL(Node), cap);
         // Puts an Implicit wait, Will wait for 10 seconds before throwing exception
@@ -71,7 +72,7 @@ public class Grid_Stub {
 	public void main() throws Exception {
 		// TODO Auto-generated method stub
 		Log.info("executing main logic...");
-		driver.get("http://www.yahoo.com");
+		driver.get("http://www.gmail.com");
 	}
 
 	@AfterMethod
