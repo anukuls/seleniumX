@@ -25,12 +25,6 @@ import org.testng.xml.XmlClass;
 import org.testng.xml.XmlSuite;
 import org.testng.xml.XmlTest;
 
-import utility.Custom_Reporter;
-
-
-
-
-
 
 //import javax.mail.*;
 //import javax.mail.internet.*;
