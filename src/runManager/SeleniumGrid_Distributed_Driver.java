@@ -190,6 +190,8 @@ public class SeleniumGrid_Distributed_Driver implements Distributed_Driver {
 		//Create an instance of XML Suite and assign a name for it.
 		XmlSuite mySuite = new XmlSuite();
 		mySuite.setName("Distributed Test Suites");
+		mySuite.setParallel("tests");
+		mySuite.setThreadCount(4);
 		
 		//<suite>
 		
