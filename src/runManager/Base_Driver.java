@@ -1,16 +1,36 @@
 package runManager;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.testng.IInvokedMethod;
+import org.testng.IObjectFactory;
+import org.testng.IObjectFactory2;
+import org.testng.IReporter;
+import org.testng.ISuite;
+import org.testng.ISuiteResult;
+import org.testng.ITestNGListener;
+import org.testng.ITestNGMethod;
+import org.testng.SuiteRunState;
 import org.testng.TestNG;
+import org.testng.internal.annotations.IAnnotationFinder;
 import org.testng.xml.XmlClass;
 import org.testng.xml.XmlSuite;
 import org.testng.xml.XmlTest;
 
 import utility.Custom_Reporter;
+
+
+
+
+
 
 //import javax.mail.*;
 //import javax.mail.internet.*;
@@ -48,7 +68,7 @@ public class Base_Driver {
 			
 			Map<String,String> testngParams = new HashMap<String,String> ();
 			//TODO: Pick the browser param from a separate config file for Base Driver, name it base_driver_config.properties
-			testngParams.put("browser", "firefox");
+			testngParams.put("browser", "chrome");
 			myTest.setParameters(testngParams);
 			
 			//<suite>
@@ -91,10 +111,11 @@ public class Base_Driver {
 		
 		System.out.println(mySuites);
 		
-		List<Class> listenerClass = new ArrayList<Class>();
-		listenerClass.add(utility.Custom_Reporter.class);
-				
-		myTestNG.setListenerClasses(listenerClass);
+//		List<Class> listenerClass = new ArrayList<Class>();
+//		listenerClass.add(utility.Custom_Reporter.class);
+//				
+//		myTestNG.setListenerClasses(listenerClass);
+//		myTestNG.addListener(listenerClass);
 				
 		//Set the list of Suites to the testNG object you created earlier.
 		myTestNG.setXmlSuites(mySuites);
@@ -105,6 +126,11 @@ public class Base_Driver {
 	public static void executeSuite(HashMap<String, ArrayList<String>> suites_array) {
 		TestNG myTestNGSuites = createTestNGXML(suites_array);		
 		//invoke run() - this will run your testng xml as a total suite.
+		List<Class> listenerClass = new ArrayList<Class>();
+		listenerClass.add(utility.CustomReportListener.class);
+		myTestNGSuites.setListenerClasses(listenerClass);
+//		IReporter ir = new Custom_Reporter();
+//		myTestNGSuites.addListener(ir);
 		myTestNGSuites.run();		
 	}
 	

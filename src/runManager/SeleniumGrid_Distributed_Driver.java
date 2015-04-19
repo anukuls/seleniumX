@@ -24,6 +24,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.firefox.internal.ProfilesIni;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.testng.TestListenerAdapter;
 import org.testng.TestNG;
 import org.testng.xml.XmlClass;
 import org.testng.xml.XmlSuite;
@@ -277,10 +278,14 @@ public class SeleniumGrid_Distributed_Driver implements Distributed_Driver {
 		
 		System.out.println(mySuites);
 		
+		
+		TestListenerAdapter	tla = new TestListenerAdapter();
+
 		List<Class> listenerClass = new ArrayList<Class>();
 		listenerClass.add(utility.Custom_Reporter.class);
 				
 		myTestNG.setListenerClasses(listenerClass);
+		myTestNG.addListener(listenerClass);
 				
 		//Set the list of Suites to the testNG object you created earlier.
 		myTestNG.setXmlSuites(mySuites);
