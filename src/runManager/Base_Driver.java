@@ -55,7 +55,8 @@ public class Base_Driver {
 			//   <test>
 			
 			List<XmlClass> myClasses = new ArrayList<XmlClass>();			
-			for (String script : suites_arr.get(suite)) {				
+			for (String script : suites_arr.get(suite)) {		
+				System.out.println("Script name is: " + script);
 				//Create a list which can contain the classes that you want to run.				
 				myClasses.add(new XmlClass(script));
 			}

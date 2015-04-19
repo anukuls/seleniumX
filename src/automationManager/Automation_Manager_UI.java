@@ -235,8 +235,9 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 		JButton batchBtn = new JButton();
 		batchBtn.setName("batchButton");
 		jp.add(batchLabel);
-		batchLabel.setText("Execute batch scripts..");
+		batchLabel.setText("Execute scripts defined in runConfig.properties!!");
 		jp.add(batchBtn);
+		batchBtn.setText("Start Parallel Run");
 		batchBtn.addActionListener(new ActionListener() {
 						
 			@Override
