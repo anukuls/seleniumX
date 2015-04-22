@@ -13,7 +13,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class Excel_Utils {
 
 	private XSSFWorkbook ExcelWBook;
-	private XSSFSheet ExcelWSheet;
+	private static XSSFSheet ExcelWSheet;
 	private String Path;
 	private Hashtable testdata = new Hashtable();
 	
@@ -61,11 +61,15 @@ public class Excel_Utils {
 	}
 
 	// This method to get the data from a cell.
-	public String getCellData(String TC_ID, String Field) throws Exception {
+	public String getCellData(Object obj, String Field) throws Exception {
+		
+		String TC_ID = obj.getClass().getSimpleName();
+		System.out.println("TC_ID is: " + TC_ID);
 
 		try {
 			int col_id = 0;
 			int row_id = 0;
+			
 			String testdata = "";
 			Row header = ExcelWSheet.getRow(0);
 			Iterator<Cell> cellIterator = header.cellIterator();
