@@ -37,7 +37,7 @@ public class TestNG_Routing_POC {
 						String url = null;
 						url = excel.getCellData("TC_01", "URL");
 						Common_Actions.launchApplication(driver, url);
-						Login_Action.perform(driver);
+//						Login_Action.perform(driver);
 						String page_title = Common_Actions.getTitle();
 						Assert.assertEquals("Welcome", page_title);
 						Log.info("Login Successfull...");

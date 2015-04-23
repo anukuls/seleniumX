@@ -6,6 +6,8 @@ import utility.Log;
 import org.apache.log4j.xml.DOMConfigurator;
 import org.openqa.selenium.WebDriver;
 
+import utility.Properties_Utils;
+
 public class Login_Module_POC {
 
 	public static void main(String[] args) {
@@ -15,7 +17,11 @@ public class Login_Module_POC {
 		
 		Log.info("Starting login test case");
 		// TODO Auto-generated method stub
-		Login_Action.perform(driver);
+		
+		String workingDir = System.getProperty("user.dir");
+		String path = workingDir+"\\src\\config\\testdata.properties";
+		String username = Properties_Utils.get_property(path, "username"); 
+		Login_Action.perform(driver, username, "password");
 		
 		Log.info("Login to application successful");
 	}

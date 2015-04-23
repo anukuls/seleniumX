@@ -25,7 +25,7 @@ public class TestNG_Stub implements Testcase {
 		
 		driver = Common_Actions.openBrowser("chrome");
 		Common_Actions.launchApplication(driver, "https://qev147.qa1.liveops.com");
-		Login_Action.perform(driver);
+//		Login_Action.perform(driver);
 	}
 
 	@Test

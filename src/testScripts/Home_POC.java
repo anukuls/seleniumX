@@ -13,7 +13,7 @@ public class Home_POC {
 	public static void main(String[] args) throws InterruptedException {
 		// TODO Auto-generated method stub
 		WebDriver driver = null;
-		Login_Action.perform(driver);
+//		Login_Action.perform(driver);
 		WebDriverWait myWait = new WebDriverWait(driver, 30);
 		myWait.until(ExpectedConditions.visibilityOfElementLocated(By
 				.linkText("Sign Out")));
