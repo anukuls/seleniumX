@@ -12,7 +12,7 @@ import projectModule.Login_Action;
 import runManager.Testcase;
 import utility.Log;
 
-public class TestNG_Stub implements Testcase {
+public class TestNG_Stub extends Testcase {
 	
 	//Instance variable driver created to use this across all methods
 	public WebDriver driver;

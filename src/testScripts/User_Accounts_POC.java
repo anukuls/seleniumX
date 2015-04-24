@@ -14,7 +14,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.AfterMethod;
 import org.testng.Reporter;
 
-public class User_Accounts_POC implements Testcase {
+public class User_Accounts_POC extends Testcase {
 
 	WebDriver driver = null;
 
