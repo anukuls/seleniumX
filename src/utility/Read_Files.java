@@ -33,7 +33,14 @@ public class Read_Files {
 	        } 
 	        else {
 	            System.out.println(fileEntry.getName());
-	            arrList.add(fileEntry.getName());
+	            if (fileEntry.getName().equals("TestData.xlsx")) {
+	            	//NOTE: Automation Manager shows TestData.xlsx file as well when a given suite is selected
+	            	//We dont need to display that file
+	            }
+	            else
+	            {
+	            	arrList.add(fileEntry.getName());
+	            }
 	        }
 	    }
 	    System.out.println(arrList);

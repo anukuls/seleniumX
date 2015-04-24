@@ -19,13 +19,13 @@ public class TestData_Loader {
 		String testdata_path = null;
 		String workingDir = System.getProperty("user.dir");
 		
-		System.out.println("canonical class name is: " + class_name);
+//		System.out.println("canonical class name is: " + class_name);
 		
 		String[] class_name_splitter = class_name.split("\\.");
-		System.out.println("split class name is: " + class_name_splitter);
+//		System.out.println("split class name is: " + class_name_splitter);
 		
 		testdata_path = workingDir + "\\src\\" + class_name_splitter[0] + "\\" + class_name_splitter[1] + "\\TestData.xlsx";
-		System.out.println("Test data path is: " + testdata_path);
+//		System.out.println("Test data path is: " + testdata_path);
 		
 		return testdata_path;				
 	} 
