@@ -16,11 +16,11 @@ import java.net.MalformedURLException;
 
 import org.openqa.selenium.WebDriver;
 
-//import utility.Common_Actions;
-
-//import projectModule.Login_Action;
+import projectModule.Login_Action;
 import runManager.Testcase;
+import utility.Excel_Utils;
 import utility.Log;
+import utility.TestData_Loader;
 
 public class Grid_Stub extends Testcase {
 	
@@ -28,17 +28,15 @@ public class Grid_Stub extends Testcase {
 	public WebDriver driver;
 //	public DesiredCapabilities cap;
 	public String URL, Node;
+	public Excel_Utils data;
     protected ThreadLocal<RemoteWebDriver> threadDriver = null;
 
 	@Parameters({"browser","port","node"})
 	@BeforeMethod
-	public void preScript(String browser, String port, String node) throws MalformedURLException {
-		//Initialize Logger
-		Log.initializeLog();
-		Log.startTC();
+	public void preScript(String browser, String port, String node) throws Exception {
 
-		String URL = "http://www.google.com";
-		System.out.println(" Executing on FireFox");
+		data = TestData_Loader.loadTestData(this);
+		String URL = data.getCellData(this, "URL");
 		
 		//TODO: Node url to be formed at runtime, this information would be read from the @Parameters tag of the testng.xml
 //        String Node = "http://10.32.14.15:5555/wd/hub";
@@ -70,16 +68,16 @@ public class Grid_Stub extends Testcase {
 
 	@Test
 	public void main() throws Exception {
-		// TODO Auto-generated method stub
-		Log.info("executing main logic...");
-		driver.get("http://www.gmail.com");
+		
+		String username = data.getCellData(this, "Username");
+		String password = data.getCellData(this, "Password");
+		
+		Login_Action.perform(driver, username, password);
 	}
 
 	@AfterMethod
 	public void postScript() throws Exception {
-		// TODO Auto-generated method stub
-		driver.quit();
-		Log.endTC();
+//		driver.quit();
 	}
 
 }

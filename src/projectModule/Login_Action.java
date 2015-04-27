@@ -10,13 +10,13 @@ public class Login_Action {
 
 	public static void perform(WebDriver driver, String username, String password ) {
 		//WebDriver driver = new FirefoxDriver();
-		Excel_Utils excel;
+//		Excel_Utils excel;
 		try {
-			excel = new Excel_Utils();
-
-			//String url = excel.getCellData("TC_01", "URL");
-			String user = excel.getCellData("TC_01", "Username");
-			String pass = excel.getCellData("TC_01", "Password");
+//			excel = new Excel_Utils();
+//
+//			//String url = excel.getCellData("TC_01", "URL");
+//			String user = excel.getCellData("TC_01", "Username");
+//			String pass = excel.getCellData("TC_01", "Password");
 			
 			//driver.navigate().to(url);
 			Login_Page.textfield_Username(driver).sendKeys(username);
