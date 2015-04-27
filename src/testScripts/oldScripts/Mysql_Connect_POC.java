@@ -1,4 +1,4 @@
-package testScripts;
+package testScripts.oldScripts;
 
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;

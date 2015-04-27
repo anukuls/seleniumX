@@ -1,4 +1,4 @@
-    package testScripts;
+    package testScripts.oldScripts;
     
     import pageObjects.Login_Page;
     import org.openqa.selenium.WebDriver;

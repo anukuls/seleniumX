@@ -1,4 +1,4 @@
-package testScripts;
+package testScripts.oldScripts;
 
 import org.apache.log4j.xml.DOMConfigurator;
 import org.openqa.selenium.By;
