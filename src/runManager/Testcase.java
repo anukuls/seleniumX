@@ -1,7 +1,6 @@
 package runManager;
 
-//Defining interface for Testcase.  Every testScript will implement this interface
-//and define the implementation of the methods present inside
+//Defining class for Testcase.  Every testScript will extend this class
 public class Testcase {
 	
 	public void preScript() throws Exception {

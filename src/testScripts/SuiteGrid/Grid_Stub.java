@@ -22,7 +22,7 @@ import org.openqa.selenium.WebDriver;
 import runManager.Testcase;
 import utility.Log;
 
-public class Grid_Stub {
+public class Grid_Stub extends Testcase {
 	
 	//Instance variable driver created to use this across all methods
 	public WebDriver driver;
