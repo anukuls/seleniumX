@@ -64,7 +64,6 @@ public class Excel_Utils {
 	public String getCellData(Object obj, String Field) throws Exception {
 		
 		String TC_ID = obj.getClass().getSimpleName();
-		System.out.println("TC_ID is: " + TC_ID);
 
 		try {
 			int col_id = 0;
