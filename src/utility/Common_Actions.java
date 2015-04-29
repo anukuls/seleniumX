@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -52,29 +53,29 @@ public class Common_Actions {
 	}
 	
 	public static WebDriver openRemoteBrowser(String browser_name, String node, String port) throws Exception {
+		String Node = "http://" + node + ":" + port + "/wd/hub";
+		
 		try {
 			switch (browser_name.toLowerCase()){
 			
-			case "firefox":
-				//TODO: pick this info from runConfig.properties
-//				String ipAddress = getSystemIPAddress();
-//				String workingDir = System.getProperty("user.dir");
-//				String path = workingDir+"\\src\\config\\runConfig.properties";
-//				String tests = Properties_Utils.get_property(path,ipAddress);
-//				String Node = "http://10.32.14.15:5555/wd/hub";
-				
-				String Node = "http://" + node + ":" + port + "/wd/hub";
-				System.out.println("Node URL is: " + Node);
-		        System.out.println("Browser of execution is: " + browser_name);
-				
-		        DesiredCapabilities cap = DesiredCapabilities.firefox();
-		        cap.setBrowserName(browser_name);
-		        
-		        driver = new RemoteWebDriver(new URL(Node), cap);
+			case "firefox":								
+		        DesiredCapabilities firecap = DesiredCapabilities.firefox();
+		        firecap.setBrowserName(browser_name);		        
+		        driver = new RemoteWebDriver(new URL(Node), firecap);
 				break;
 			case "chrome":
-				System.setProperty("webdriver.chrome.driver", chromedriver_location);
-				driver = new ChromeDriver();
+				System.out.println("chrome driver location is : " + chromedriver_location);
+//				System.setProperty("webdriver.chrome.driver", chromedriver_location);
+				System.setProperty("webdriver.chrome.driver", "C:/Users/Smoke/git/seleniumX/drivers/chromedriver.exe");
+				DesiredCapabilities chromecap = DesiredCapabilities.chrome();
+				
+				ChromeOptions options = new ChromeOptions();
+				options.setBinary("C:/Program Files (x86)/Google/Chrome/Application/chrome.exe");
+//				options.BinaryLocation = 
+				
+				chromecap.setCapability(ChromeOptions.CAPABILITY, options);
+				chromecap.setBrowserName(browser_name);
+				driver = new RemoteWebDriver(new URL(Node), chromecap);
 				break;
 			default:
 				System.setProperty("webdriver.ie.driver", iedriver_location);

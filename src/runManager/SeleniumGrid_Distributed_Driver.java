@@ -20,6 +20,8 @@ import org.openqa.grid.common.SeleniumProtocol;
 import org.openqa.grid.internal.utils.GridHubConfiguration;
 import org.openqa.grid.internal.utils.SelfRegisteringRemote;
 import org.openqa.grid.web.Hub;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.firefox.internal.ProfilesIni;
@@ -214,7 +216,7 @@ public class SeleniumGrid_Distributed_Driver implements Distributed_Driver {
 			//Add params like browser, port and node ip
 			Map<String,String> testngParams = new HashMap<String,String> ();
 			//TODO: Pick browser info from another config file, name it grid_driver_config.properties
-			testngParams.put("browser", "firefox");
+			testngParams.put("browser", "chrome");
 			testngParams.put("port", "5555");
 			testngParams.put("node", ip);
 			myTest.setParameters(testngParams);
@@ -356,12 +358,26 @@ public class SeleniumGrid_Distributed_Driver implements Distributed_Driver {
 		RegistrationRequest req = new RegistrationRequest();
 		req.setRole(GridRole.NODE);
 		
-		DesiredCapabilities firefox = DesiredCapabilities.firefox();
-		firefox.setBrowserName("*firefox");
-		FirefoxProfile profile = new ProfilesIni().getProfile("Selenium");
-		firefox.setCapability(FirefoxDriver.PROFILE, profile);
-		firefox.setCapability("seleniumProtocol", SeleniumProtocol.Selenium);
-		req.addDesiredCapability(firefox);
+		//TODO: Pick this value from runConfig and accordingly set browser capability
+		System.setProperty("webdriver.chrome.driver", "C:/Users/Smoke/git/seleniumX/drivers/chromedriver.exe");
+		DesiredCapabilities chrome = DesiredCapabilities.chrome();
+		
+		ChromeOptions options = new ChromeOptions();
+		options.setBinary("C:/Program Files (x86)/Google/Chrome/Application/chrome.exe");
+		
+		chrome.setCapability(ChromeOptions.CAPABILITY, options);
+		
+		System.out.println("Started chrome profile");
+		
+//		DesiredCapabilities firefox = DesiredCapabilities.firefox();
+//		firefox.setBrowserName("*firefox");
+//		FirefoxProfile profile = new ProfilesIni().getProfile("Selenium");
+//		firefox.setCapability(FirefoxDriver.PROFILE, profile);
+//		firefox.setCapability("seleniumProtocol", SeleniumProtocol.Selenium);
+		
+//		chrome.setCapability(, profile);
+		chrome.setCapability("seleniumProtocol", SeleniumProtocol.Selenium);
+		req.addDesiredCapability(chrome);
 		
 		Map<String, Object> nodeConfiguration = new HashMap<String,Object>();
 		nodeConfiguration.put(RegistrationRequest.AUTO_REGISTER, true);
