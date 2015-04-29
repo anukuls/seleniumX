@@ -384,8 +384,6 @@ public class SeleniumGrid_Distributed_Driver implements Distributed_Driver {
 		nodeConfiguration.put(RegistrationRequest.HUB_HOST, hubIP);
 		nodeConfiguration.put(RegistrationRequest.HUB_PORT, 4444);
 		nodeConfiguration.put(RegistrationRequest.PORT, nodePort);
-		nodeConfiguration.put(RegistrationRequest.MAX_INSTANCES, 2);
-		nodeConfiguration.put(RegistrationRequest.MAX_SESSION, 2);
 		
 		URL remoteURL = null;
 		try {
@@ -397,10 +395,10 @@ public class SeleniumGrid_Distributed_Driver implements Distributed_Driver {
 		}
 		
 		nodeConfiguration.put(RegistrationRequest.PROXY_CLASS, "org.openqa.grid.selenium.proxy.DefaultRemoteProxy");
-		nodeConfiguration.put(RegistrationRequest.MAX_SESSION, 1);
+		nodeConfiguration.put(RegistrationRequest.MAX_SESSION, 2);
 		nodeConfiguration.put(RegistrationRequest.CLEAN_UP_CYCLE, 2000);
 		nodeConfiguration.put(RegistrationRequest.REMOTE_HOST, remoteURL);
-		nodeConfiguration.put(RegistrationRequest.MAX_INSTANCES, 1);
+		nodeConfiguration.put(RegistrationRequest.MAX_INSTANCES, 2);
 		
 		req.setConfiguration(nodeConfiguration);
 		
