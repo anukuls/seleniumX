@@ -11,7 +11,7 @@ public class Testcase {
 		throw new Exception("preScript not defined");
 	}
 	
-	public void preScript(String browser, String port, String node) throws Exception {
+	public void preScript(String browser, String node, String port) throws Exception {
 		throw new Exception("preScript not defined");
 	}
 	

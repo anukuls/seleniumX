@@ -32,14 +32,14 @@ public class Grid_Stub extends Testcase {
 	public Excel_Utils data;
     protected ThreadLocal<RemoteWebDriver> threadDriver = null;
 
-	@Parameters({"browser","port","node"})
+	@Parameters({"browser","node","port"})
 	@BeforeMethod
-	public void preScript(String browser, String port, String node) throws Exception {
+	public void preScript(String browser, String node, String port) throws Exception {
 
 		data = TestData_Loader.loadTestData(this);
 		String URL = data.getCellData(this, "URL");
 		
-		driver = Common_Actions.openRemoteBrowser(browser, port, node);
+		driver = Common_Actions.openRemoteBrowser(browser, node, port);
 		//TODO: Node url to be formed at runtime, this information would be read from the @Parameters tag of the testng.xml
 //        String Node = "http://10.32.14.15:5555/wd/hub";
 //        String Node = "http://" + node + ":" + port + "/wd/hub";
@@ -73,6 +73,8 @@ public class Grid_Stub extends Testcase {
 		
 		String username = data.getCellData(this, "Username");
 		String password = data.getCellData(this, "Password");
+		System.out.println("username is : " + username);
+		System.out.println("password is : " + password);
 		
 		Login_Action.perform(driver, username, password);
 	}
