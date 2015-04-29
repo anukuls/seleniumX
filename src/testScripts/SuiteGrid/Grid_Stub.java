@@ -18,6 +18,7 @@ import org.openqa.selenium.WebDriver;
 
 import projectModule.Login_Action;
 import runManager.Testcase;
+import utility.Common_Actions;
 import utility.Excel_Utils;
 import utility.Log;
 import utility.TestData_Loader;
@@ -38,16 +39,17 @@ public class Grid_Stub extends Testcase {
 		data = TestData_Loader.loadTestData(this);
 		String URL = data.getCellData(this, "URL");
 		
+		driver = Common_Actions.openRemoteBrowser(browser, port, node);
 		//TODO: Node url to be formed at runtime, this information would be read from the @Parameters tag of the testng.xml
 //        String Node = "http://10.32.14.15:5555/wd/hub";
-        String Node = "http://" + node + ":" + port + "/wd/hub";
-        System.out.println("Node URL is: " + Node);
-        System.out.println("Browser of execution is: " + browser);
+//        String Node = "http://" + node + ":" + port + "/wd/hub";
+//        System.out.println("Node URL is: " + Node);
+//        System.out.println("Browser of execution is: " + browser);
         
 //        if(browser.equals("firefox")) 
 //        {
-        	DesiredCapabilities cap = DesiredCapabilities.firefox(); 
-        	cap.setBrowserName(browser);
+//        	DesiredCapabilities cap = DesiredCapabilities.firefox(); 
+//        	cap.setBrowserName(browser);
 //        }
 //        else
 //        {
@@ -57,13 +59,13 @@ public class Grid_Stub extends Testcase {
 //        cap.setBrowserName("firefox");
         
         
-        driver = new RemoteWebDriver(new URL(Node), cap);
+//        driver = new RemoteWebDriver(new URL(Node), cap);
         // Puts an Implicit wait, Will wait for 10 seconds before throwing exception
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+//        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         
         // Launch website
         driver.navigate().to(URL);
-        driver.manage().window().maximize();
+//        driver.manage().window().maximize();
 	}
 
 	@Test

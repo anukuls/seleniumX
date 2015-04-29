@@ -51,19 +51,24 @@ public class Common_Actions {
 
 	}
 	
-	public static WebDriver openRemoteBrowser(String browser_name) throws Exception {
+	public static WebDriver openRemoteBrowser(String browser_name, String node, String port) throws Exception {
 		try {
 			switch (browser_name.toLowerCase()){
 			
 			case "firefox":
 				//TODO: pick this info from runConfig.properties
-				String ipAddress = getSystemIPAddress();
-				String workingDir = System.getProperty("user.dir");
-				String path = workingDir+"\\src\\config\\runConfig.properties";
-				String tests = Properties_Utils.get_property(path,ipAddress);
-				String Node = "http://10.32.14.15:5555/wd/hub";
+//				String ipAddress = getSystemIPAddress();
+//				String workingDir = System.getProperty("user.dir");
+//				String path = workingDir+"\\src\\config\\runConfig.properties";
+//				String tests = Properties_Utils.get_property(path,ipAddress);
+//				String Node = "http://10.32.14.15:5555/wd/hub";
+				
+				String Node = "http://" + node + ":" + port + "/wd/hub";
+				System.out.println("Node URL is: " + Node);
+		        System.out.println("Browser of execution is: " + browser_name);
+				
 		        DesiredCapabilities cap = DesiredCapabilities.firefox();
-		        cap.setBrowserName("firefox");
+		        cap.setBrowserName(browser_name);
 		        
 		        driver = new RemoteWebDriver(new URL(Node), cap);
 				break;
