@@ -384,6 +384,8 @@ public class SeleniumGrid_Distributed_Driver implements Distributed_Driver {
 		nodeConfiguration.put(RegistrationRequest.HUB_HOST, hubIP);
 		nodeConfiguration.put(RegistrationRequest.HUB_PORT, 4444);
 		nodeConfiguration.put(RegistrationRequest.PORT, nodePort);
+		nodeConfiguration.put(RegistrationRequest.MAX_INSTANCES, 2);
+		nodeConfiguration.put(RegistrationRequest.MAX_SESSION, 2);
 		
 		URL remoteURL = null;
 		try {
