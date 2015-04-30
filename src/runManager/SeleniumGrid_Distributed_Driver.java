@@ -359,25 +359,25 @@ public class SeleniumGrid_Distributed_Driver implements Distributed_Driver {
 		req.setRole(GridRole.NODE);
 		
 		//TODO: Pick this value from runConfig and accordingly set browser capability
-		System.setProperty("webdriver.chrome.driver", "C:/Users/Smoke/git/seleniumX/drivers/chromedriver.exe");
-		DesiredCapabilities chrome = DesiredCapabilities.chrome();
+//		System.setProperty("webdriver.chrome.driver", "C:/Users/Smoke/git/seleniumX/drivers/chromedriver.exe");
+//		DesiredCapabilities chrome = DesiredCapabilities.chrome();
 		
-		ChromeOptions options = new ChromeOptions();
-		options.setBinary("C:/Program Files (x86)/Google/Chrome/Application/chrome.exe");
+//		ChromeOptions options = new ChromeOptions();
+//		options.setBinary("C:/Program Files (x86)/Google/Chrome/Application/chrome.exe");
+//		
+//		chrome.setCapability(ChromeOptions.CAPABILITY, options);
 		
-		chrome.setCapability(ChromeOptions.CAPABILITY, options);
+//		System.out.println("Started chrome profile");
 		
-		System.out.println("Started chrome profile");
-		
-//		DesiredCapabilities firefox = DesiredCapabilities.firefox();
-//		firefox.setBrowserName("*firefox");
-//		FirefoxProfile profile = new ProfilesIni().getProfile("Selenium");
-//		firefox.setCapability(FirefoxDriver.PROFILE, profile);
-//		firefox.setCapability("seleniumProtocol", SeleniumProtocol.Selenium);
+		DesiredCapabilities firefox = DesiredCapabilities.firefox();
+		firefox.setBrowserName("*firefox");
+		FirefoxProfile profile = new ProfilesIni().getProfile("Selenium");
+		firefox.setCapability(FirefoxDriver.PROFILE, profile);
+		firefox.setCapability("seleniumProtocol", SeleniumProtocol.Selenium);
 		
 //		chrome.setCapability(, profile);
-		chrome.setCapability("seleniumProtocol", SeleniumProtocol.Selenium);
-		req.addDesiredCapability(chrome);
+//		chrome.setCapability("seleniumProtocol", SeleniumProtocol.Selenium);
+		req.addDesiredCapability(firefox);
 		
 		Map<String, Object> nodeConfiguration = new HashMap<String,Object>();
 		nodeConfiguration.put(RegistrationRequest.AUTO_REGISTER, true);
