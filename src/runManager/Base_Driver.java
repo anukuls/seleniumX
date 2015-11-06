@@ -26,6 +26,10 @@ import org.testng.xml.XmlSuite;
 import org.testng.xml.XmlTest;
 
 
+
+
+import utility.Properties_Utils;
+
 //import javax.mail.*;
 //import javax.mail.internet.*;
 //import javax.activation.*;
@@ -61,8 +65,15 @@ public class Base_Driver {
 			myTest.setName(suite);
 			
 			Map<String,String> testngParams = new HashMap<String,String> ();
-			//TODO: Pick the browser param from a separate config file for Base Driver, name it base_driver_config.properties
-			testngParams.put("browser", "chrome");
+			
+			String browser = getBrowserParam();
+			if (browser == "") {
+				browser = "firefox";
+			}
+			
+			System.out.println("Executing test case on :" + browser);
+			
+			testngParams.put("browser", browser);
 			myTest.setParameters(testngParams);
 			
 			//<suite>
@@ -158,6 +169,14 @@ public class Base_Driver {
 //		transport.sendMessage(generateMailMessage, generateMailMessage.getAllRecipients());
 //		transport.close();
 //	}
+	
+	public static String getBrowserParam() {
+		String browser="";
+		String workingDir = System.getProperty("user.dir");
+		String path = workingDir+"\\src\\config\\base_driver_config.properties";
+		browser = Properties_Utils.get_property(path,"browser");
+		return browser;
+	}
 
 	public static void main(HashMap<String, ArrayList<String>> args) {
 		// TODO Auto-generated method stub
