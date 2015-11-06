@@ -16,7 +16,7 @@ import java.net.MalformedURLException;
 
 import org.openqa.selenium.WebDriver;
 
-import projectModule.Login_Action;
+//import projectModule.Login_Action;
 import runManager.Testcase;
 import utility.Common_Actions;
 import utility.Excel_Utils;
@@ -67,7 +67,7 @@ public class Grid_Stub extends Testcase {
 		System.out.println("username is : " + username);
 		System.out.println("password is : " + password);
 		
-		Login_Action.perform(driver, username, password);
+//		Login_Action.perform(driver, username, password);
 	}
 
 	@AfterMethod

@@ -58,8 +58,18 @@ public class Google_Page {
 		return element;
 	}
 	
-	public static WebElement body_SeleniumPage(WebDriver driver){
-		element = driver.findElement(By.cssSelector("body"));
+	public static WebElement body_SeleniumPage(WebDriver driver) throws Exception{
+		myWait = new WebDriverWait(driver, 30);
+		myWait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("body")));
+		try
+		{
+			element = driver.findElement(By.cssSelector("body"));
+		}
+		catch (NoSuchElementException e) 
+		{
+			throw new Element_Not_Found_Exception("Unable to Selenium Webdriver page", e);
+		}
+		
 		return element;
 	}
 
