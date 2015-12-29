@@ -65,5 +65,14 @@ public class Read_Files {
 		scriptsArray = listFilesForFolder(folder);
 		return scriptsArray;
 	}
+	
+	public static ArrayList<String> readBatchConfig() {
+		ArrayList<String> batchArray = new ArrayList<String>(); 
+		String workingDir = System.getProperty("user.dir");
+	    final String path = workingDir+"\\src\\batchConfig";
+	    final File folder = new File(path);
+	    batchArray = listFilesForFolder(folder);
+		return batchArray;
+	}
 
 }

@@ -19,6 +19,7 @@ import utility.Read_Files;
 import utility.Properties_Utils;
 import runManager.Base_Driver;
 import runManager.SeleniumGrid_Distributed_Driver;
+import runManager.Batch_Driver;
 
 public class Automation_Manager_UI extends JPanel implements ItemListener { 
 	
@@ -27,18 +28,24 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 	JButton btn;
 	JButton hubBtn;
 	JButton nodeBtn;
+	JButton executeBatch;
 	JLabel lbl;
 	JLabel lbl1;
 	JLabel lbl2;
+	JLabel lbl3;
 	JLabel hubLabel;
 	JLabel nodeLabel;
 	JRadioButton radio1;
 	JRadioButton radio2;
+	JRadioButton radio3;
+	JRadioButton batch1;
 	ButtonGroup bg;
+	ButtonGroup bg2;
 	JTextField jtf;
 	
 	ArrayList<String> suitesArr;
 	ArrayList<String> scriptsArr;
+	ArrayList<String> batchArr;
 	String suite_path;
 //	HashMap<String, String[]> suites_hash = new HashMap<String, String[]>();
 	HashMap<String, ArrayList<String>> suites_hash = new HashMap<String, ArrayList<String>>();
@@ -48,18 +55,23 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 	
 	public Automation_Manager_UI() {
 		suitesArr = Read_Files.readDir();
+		batchArr = Read_Files.readBatchConfig();
 		System.out.println(suitesArr);
+		System.out.println(batchArr);
 		
 		jp.setLayout(new GridLayout(15,50));
 		lbl = new JLabel("Welcome to the Automation Manager.  Please choose the mode of execution");
 		lbl2 = new JLabel();
+		lbl3 = new JLabel();
 		jp.add(lbl);
 		
 		radio1 = new JRadioButton("Single Machine Mode");
 		radio2 = new JRadioButton("Multi Machine Mode");
+		radio3 = new JRadioButton("Batch Mode");
 		bg = new ButtonGroup();
 		bg.add(radio1);
 		bg.add(radio2);
+		bg.add(radio3);
 		jp.add(radio1);
 		
 		setLayout(new BorderLayout());
@@ -181,6 +193,31 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 			}
 			
 		});
+		
+		jp.add(radio3);
+		radio3.addItemListener(new ItemListener() {
+						
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				// TODO Auto-generated method stub
+				if(e.getStateChange() == 1) 
+				{
+					lbl3.setText("Choose Batch to execute");
+					jp.add(lbl3);
+					jp.revalidate();
+					jp.repaint();
+				}
+				
+//				System.out.println("Single mode radio state is: " + e.getStateChange());
+				
+				JRadioButton rad = (JRadioButton)e.getSource();
+				if(rad.isSelected()) {
+					selectBatch();
+				}				
+			}
+			
+		});
+		
 		//TODO: 1. Provide radio option for single machine mode or grid mode - done
 		//2. If single machine mode chosen, call initUI, and let the base driver take its seat - done
 		//3. If multi mode chosen, do not call initUI, determine from config whether machine under execution is a hub or a node - done
@@ -200,6 +237,52 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 			jp.add(lbl1);
 			suite1.addItemListener(this);
 		}	
+	}
+	
+	public void selectBatch() {
+		executeBatch = new JButton();
+		executeBatch.setName("executeBatchButton");
+		for (String b : batchArr) {
+			batch1 = new JRadioButton(b);
+			batch1.setName(b);
+			bg2 = new ButtonGroup();
+			bg2.add(batch1);
+			jp.add(batch1);
+			batch1.addItemListener(new ItemListener() {
+				
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					// TODO Auto-generated method stub
+					
+//					JRadioButton rad = (JRadioButton)e.getSource();
+//					if (rad.isSelected()) {
+						executeSelectedBatch(e);
+//					}
+				}
+				
+			});
+		}	
+	} 
+	
+	public void executeSelectedBatch(ItemEvent e){
+		final JRadioButton rad = (JRadioButton)e.getSource();
+		if (rad.isSelected()) {			
+			jp.add(executeBatch);
+			executeBatch.setText("Execute Batch");
+			executeBatch.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+				    //TODO: 1. Execute the selected testng object
+				    String workingDir = System.getProperty("user.dir");
+				    String suite_path = workingDir + "\\src\\batchConfig\\" + rad.getText();
+				    System.out.println("suite path is : " + suite_path);
+				    Batch_Driver.main(suite_path);
+				}
+			});
+		}
+		jp.repaint();
+		jp.revalidate();
 	}
 	
 	public void deleteAllButtons() {
