@@ -132,18 +132,22 @@ public class Batch_Driver {
 	public static void main(String suite_path) {
 		// TODO Auto-generated method stub
 		executeTestNGSuite(suite_path);   
-		//TODO: Add functionality for rerunning failures after analyzing the report
-		//Get the rerun count from batch_driver_config.properties file
 		String workingDir = System.getProperty("user.dir");
 		String path = workingDir+"\\src\\config\\batch_driver_config.properties";
 		String rerun = Properties_Utils.get_property(path,"rerun");
 		Integer rerun_count = Integer.valueOf(rerun);
-		if (rerun_count > 1) {
-			ArrayList<String> failures = getFailures();
-			rerunFailures(failures);
-//			rerunFailures();
+		ArrayList<String> failures = getFailures();
+		
+		//TODO: Handle the skipped cases as failures too
+		if (failures.isEmpty()) {
+			System.out.println("No Failures have been found!!");
 		}
-			
+		else
+		{
+			if (rerun_count > 1) {
+				rerunFailures(failures);
+			}
+		}	
 	}
 	
 }

@@ -54,6 +54,6 @@
 	<classpathentry kind="lib" path="lib/selenium-2.44.0/libs/xercesImpl-2.11.0.jar"/>
 	<classpathentry kind="lib" path="lib/selenium-2.44.0/libs/xml-apis-1.4.01.jar"/>
 	<classpathentry kind="lib" path="lib/selenium-2.44.0/selenium-server-standalone-2.44.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/meenakshi.singh/Downloads/jsch-0.1.53.jar"/>
+	<classpathentry kind="lib" path="C:/Users/anukul.singhal/git/seleniumX/lib/jsch-0.1.53.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
