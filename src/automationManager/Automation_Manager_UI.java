@@ -39,9 +39,12 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 	JRadioButton radio2;
 	JRadioButton radio3;
 	JRadioButton batch1;
+	ArrayList<JRadioButton> radios = new ArrayList<JRadioButton>();
+	ArrayList<JCheckBox> cboxes = new ArrayList<JCheckBox>();
 	ButtonGroup bg;
 	ButtonGroup bg2;
 	JTextField jtf;
+	ArrayList<String> execution_mode = new ArrayList<>();
 	
 	ArrayList<String> suitesArr;
 	ArrayList<String> scriptsArr;
@@ -83,20 +86,68 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				// TODO Auto-generated method stub
+				
 				if(e.getStateChange() == 1) 
 				{
-					lbl2.setText("Choose Scripts to execute");
-					jp.add(lbl2);
-					jp.revalidate();
-					jp.repaint();
+					int mode_size = execution_mode.size();
+					if (mode_size == 0) {
+						execution_mode.add("single");
+						System.out.println("execution_mode if:" + execution_mode);
+						lbl2.setText("Choose Scripts to execute");
+						jp.add(lbl2);
+						jp.revalidate();
+						jp.repaint();
+						
+						JRadioButton rad = (JRadioButton)e.getSource();
+						if(rad.isSelected()) {
+							initUI();
+						}
+					}
+					else {
+						String current_mode = execution_mode.get(execution_mode.size() - 1);
+						System.out.println("current mode is :" + current_mode);
+						System.out.println("execution_mode else:" + execution_mode);
+						switch(current_mode)
+						{
+							case "single" :
+								lbl2.setText("Choose Scripts to execute");
+								jp.add(lbl2);
+								jp.revalidate();
+								jp.repaint();
+								JRadioButton rad = (JRadioButton)e.getSource();
+								if(rad.isSelected()) {
+									initUI();
+								}
+								break;
+							case "multi" :
+								System.out.println("from multi to single");
+								break;
+							case "batch" :
+								System.out.println("in case batch");
+								jp.remove(lbl3);
+								for (JRadioButton radio : radios) {
+									jp.remove(radio);
+								}
+								jp.remove(executeBatch);
+								lbl2.setText("Choose Scripts to execute");
+								jp.add(lbl2);
+								jp.revalidate();
+								jp.repaint();
+								JRadioButton rd = (JRadioButton)e.getSource();
+								if(rd.isSelected()) {
+									initUI();
+								}
+								jp.revalidate();
+								jp.repaint();
+								break;
+						}
+					}
+					
 				}
 				
 				System.out.println("Single mode radio state is: " + e.getStateChange());
 				
-				JRadioButton rad = (JRadioButton)e.getSource();
-				if(rad.isSelected()) {
-					initUI();
-				}				
+								
 			}
 			
 		});
@@ -104,6 +155,7 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 		
 		jp.add(radio2);
 		radio2.addItemListener(new ItemListener() {
+			
 			JButton hubBtn = new JButton("Start Hub");
 			JButton nodeBtn = new JButton("Register Node");
 			Hub hub;
@@ -113,6 +165,7 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 			public void itemStateChanged(ItemEvent e) {
 				// TODO Auto-generated method stub
 //				initUI();
+				execution_mode.add("multi");
 				hubLabel = new JLabel();
 				nodeLabel = new JLabel();
 				
@@ -200,8 +253,17 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				// TODO Auto-generated method stub
+				execution_mode.add("batch");
+				
 				if(e.getStateChange() == 1) 
 				{
+					jp.remove(lbl2);
+					jp.remove(lbl1);
+					for (JCheckBox cbox : cboxes) {
+						jp.remove(cbox);
+					}
+					deleteAllButtons();
+					deleteAllScripts();
 					lbl3.setText("Choose Batch to execute");
 					jp.add(lbl3);
 					jp.revalidate();
@@ -232,6 +294,7 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 		for (String s : suitesArr) {
 			suite1 = new JCheckBox(s);
 			suite1.setName(s);
+			cboxes.add(suite1);
 			jp.add(suite1);
 			lbl1.setText("Select Test Scripts");
 			jp.add(lbl1);
@@ -245,6 +308,7 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 		for (String b : batchArr) {
 			batch1 = new JRadioButton(b);
 			batch1.setName(b);
+			radios.add(batch1);
 			bg2 = new ButtonGroup();
 			bg2.add(batch1);
 			jp.add(batch1);
@@ -308,6 +372,15 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 		String name = suite_name + "" + suite_name;
 		for (Component cmp : cmps) {
 			if (cmp.getClass().toString().equals("class javax.swing.JCheckBox") && cmp.getName().toString().equals(name)) {
+				jp.remove(cmp);
+			}
+		}
+	}
+	
+	public void deleteAllScripts() {
+		Component[] cmps = jp.getComponents();
+		for (Component cmp : cmps) {
+			if (cmp.getClass().toString().equals("class javax.swing.JCheckBox")) {
 				jp.remove(cmp);
 			}
 		}
@@ -467,7 +540,7 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 			for (String x : scriptsArr) {
 				String name = checkboxName + "" + checkboxName;
 				suite1 = new JCheckBox(x);
-				suite1.setName(name);							
+				suite1.setName(name);		
 				jp.add(suite1);	
 				suite1.addItemListener(new ItemListener() {
 					
