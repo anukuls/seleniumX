@@ -64,13 +64,17 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 		
 		jp.setLayout(new GridLayout(15,50));
 		lbl = new JLabel("Welcome to the Automation Manager.  Please choose the mode of execution");
+		lbl.setName("label0");
 		lbl2 = new JLabel();
 		lbl3 = new JLabel();
 		jp.add(lbl);
 		
 		radio1 = new JRadioButton("Single Machine Mode");
+		radio1.setName("single_radio");
 		radio2 = new JRadioButton("Multi Machine Mode");
+		radio2.setName("multi_radio");
 		radio3 = new JRadioButton("Batch Mode");
+		radio3.setName("batch_radio");
 		bg = new ButtonGroup();
 		bg.add(radio1);
 		bg.add(radio2);
@@ -93,15 +97,7 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 					if (mode_size == 0) {
 						execution_mode.add("single");
 						System.out.println("execution_mode if:" + execution_mode);
-						lbl2.setText("Choose Scripts to execute");
-						jp.add(lbl2);
-						jp.revalidate();
-						jp.repaint();
-						
-						JRadioButton rad = (JRadioButton)e.getSource();
-						if(rad.isSelected()) {
-							initUI();
-						}
+						displaySingleModeUI(e);
 					}
 					else {
 						String current_mode = execution_mode.get(execution_mode.size() - 1);
@@ -110,35 +106,22 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 						switch(current_mode)
 						{
 							case "single" :
-								lbl2.setText("Choose Scripts to execute");
-								jp.add(lbl2);
-								jp.revalidate();
-								jp.repaint();
-								JRadioButton rad = (JRadioButton)e.getSource();
-								if(rad.isSelected()) {
-									initUI();
-								}
+								deleteBatchModeUIComponents();
+								displaySingleModeUI(e);
 								break;
 							case "multi" :
 								System.out.println("from multi to single");
+								displaySingleModeUI(e);
 								break;
 							case "batch" :
 								System.out.println("in case batch");
-								jp.remove(lbl3);
-								for (JRadioButton radio : radios) {
-									jp.remove(radio);
-								}
-								jp.remove(executeBatch);
-								lbl2.setText("Choose Scripts to execute");
-								jp.add(lbl2);
-								jp.revalidate();
-								jp.repaint();
-								JRadioButton rd = (JRadioButton)e.getSource();
-								if(rd.isSelected()) {
-									initUI();
-								}
-								jp.revalidate();
-								jp.repaint();
+//								jp.remove(lbl3);
+//								for (JRadioButton radio : radios) {
+//									jp.remove(radio);
+//								}
+//								jp.remove(executeBatch);
+								deleteBatchModeUIComponents();
+								displaySingleModeUI(e);
 								break;
 						}
 					}
@@ -168,7 +151,8 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 				execution_mode.add("multi");
 				hubLabel = new JLabel();
 				nodeLabel = new JLabel();
-				
+				deleteSingleModeUIComponents();
+				deleteBatchModeUIComponents();
 				if(driver.isHub() && e.getStateChange() == 1) 
 				{
 					hubLabel.setText("I am the hub...Start me!!");
@@ -253,21 +237,58 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				// TODO Auto-generated method stub
-				execution_mode.add("batch");
+//				execution_mode.add("batch");
 				
 				if(e.getStateChange() == 1) 
 				{
-					jp.remove(lbl2);
-					jp.remove(lbl1);
-					for (JCheckBox cbox : cboxes) {
-						jp.remove(cbox);
+					int mode_size = execution_mode.size();
+					if (mode_size == 0) {
+						execution_mode.add("batch");
+						System.out.println("execution_mode if:" + execution_mode);
+						deleteSingleModeUIComponents();
+						lbl3.setText("Choose Batch to execute");
+						lbl3.setName("label3");
+						jp.add(lbl3);
+						jp.revalidate();
+						jp.repaint();
 					}
-					deleteAllButtons();
-					deleteAllScripts();
-					lbl3.setText("Choose Batch to execute");
-					jp.add(lbl3);
-					jp.revalidate();
-					jp.repaint();
+					else {
+						String current_mode = execution_mode.get(execution_mode.size() - 1);
+						System.out.println("current mode is :" + current_mode);
+						System.out.println("execution_mode else:" + execution_mode);
+						switch(current_mode)
+						{
+							case "single" :
+								deleteSingleModeUIComponents();
+								lbl3.setText("Choose Batch to execute");
+								lbl3.setName("label3");
+								jp.add(lbl3);
+								jp.revalidate();
+								jp.repaint();
+								break;
+							case "multi" :
+								System.out.println("from multi to single");
+								execution_mode.add("batch");
+								deleteSingleModeUIComponents();
+								lbl3.setText("Choose Batch to execute");
+								lbl3.setName("label3");
+								jp.add(lbl3);
+								jp.revalidate();
+								jp.repaint();
+								break;
+							case "batch" :
+								System.out.println("in case batch");
+								execution_mode.add("batch");
+								deleteSingleModeUIComponents();
+								lbl3.setText("Choose Batch to execute");
+								lbl3.setName("label3");
+								jp.add(lbl3);
+								jp.revalidate();
+								jp.repaint();
+								break;
+						}
+					}
+					
 				}
 				
 //				System.out.println("Single mode radio state is: " + e.getStateChange());
@@ -297,6 +318,7 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 			cboxes.add(suite1);
 			jp.add(suite1);
 			lbl1.setText("Select Test Scripts");
+			lbl1.setName("label1");
 			jp.add(lbl1);
 			suite1.addItemListener(this);
 		}	
@@ -349,6 +371,19 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 		jp.revalidate();
 	}
 	
+	public void displaySingleModeUI(ItemEvent e) {
+		lbl2.setText("Choose Scripts to execute");
+		lbl2.setName("label2");
+		jp.add(lbl2);
+		jp.revalidate();
+		jp.repaint();
+		
+		JRadioButton rad = (JRadioButton)e.getSource();
+		if(rad.isSelected()) {
+			initUI();
+		}
+	}
+	
 	public void deleteAllButtons() {
 		Component[] cmps = jp.getComponents();
 		for (Component cmp : cmps) {
@@ -381,6 +416,44 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 		Component[] cmps = jp.getComponents();
 		for (Component cmp : cmps) {
 			if (cmp.getClass().toString().equals("class javax.swing.JCheckBox")) {
+				jp.remove(cmp);
+			}
+		}
+	}
+	
+	public void deleteSingleModeUIComponents() {
+		Component[] cmps = jp.getComponents();
+		for (Component cmp : cmps) {
+			System.out.println(cmp.getName().toString());
+			System.out.println(cmp.getClass().toString());
+			
+			if (cmp.getClass().toString().equals("class javax.swing.JLabel") && cmp.getName().toString().equals("label1")) {
+				jp.remove(cmp);
+			}
+			if (cmp.getClass().toString().equals("class javax.swing.JLabel") && cmp.getName().toString().equals("label2")) {
+				jp.remove(cmp);
+			}
+			if (cmp.getClass().toString().equals("class javax.swing.JCheckBox")) {
+				jp.remove(cmp);
+			}
+		}
+		deleteAllButtons();
+		deleteAllScripts();
+	}
+	
+	public void deleteBatchModeUIComponents() {
+		jp.remove(lbl3);
+		
+		jp.remove(executeBatch);
+		Component[] cmps = jp.getComponents();
+		for (Component cmp : cmps) {
+			if (cmp.getClass().toString().equals("class javax.swing.JLabel") && cmp.getName().toString().equals("label3")) {
+				jp.remove(cmp);
+			}
+			if (cmp.getClass().toString().equals("class javax.swing.JRadioButton") && batchArr.contains(cmp.getName().toString())) {
+				jp.remove(cmp);
+			}
+			if (cmp.getClass().toString().equals("class javax.swing.JButton") && cmp.getName().toString().equals("executeBatchButton")) {
 				jp.remove(cmp);
 			}
 		}
