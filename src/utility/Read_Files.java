@@ -12,7 +12,7 @@ public class Read_Files {
 		ArrayList<String> arrList = new ArrayList<String>();
 	    for (final File fileEntry : folder.listFiles()) {
 	        if (fileEntry.isDirectory()) {
-	        	System.out.println(fileEntry.getName());
+//	        	System.out.println(fileEntry.getName());
 	        	arrList.add(fileEntry.getName());
 	            listDirs(fileEntry);
 	        } 
@@ -20,7 +20,7 @@ public class Read_Files {
 //	            System.out.println(fileEntry.getName());
 //	        }
 	    }
-	    System.out.println(arrList);
+//	    System.out.println(arrList);
 	    return arrList;
 	}
 	
@@ -32,7 +32,7 @@ public class Read_Files {
 	            listFilesForFolder(fileEntry);
 	        } 
 	        else {
-	            System.out.println(fileEntry.getName());
+//	            System.out.println(fileEntry.getName());
 	            if (fileEntry.getName().equals("TestData.xlsx")) {
 	            	//NOTE: Automation Manager shows TestData.xlsx file as well when a given suite is selected
 	            	//We dont need to display that file
@@ -43,7 +43,7 @@ public class Read_Files {
 	            }
 	        }
 	    }
-	    System.out.println(arrList);
+//	    System.out.println(arrList);
 	    return arrList;
 	}
 	
@@ -60,7 +60,7 @@ public class Read_Files {
 		ArrayList<String> scriptsArray = new ArrayList<String>(); 
 //		String workingDir = System.getProperty("user.dir");
 //	    final String path = workingDir+"\\src\\testScripts";
-		System.out.println(folder_path);
+//		System.out.println(folder_path);
 		final File folder = new File(folder_path);
 		scriptsArray = listFilesForFolder(folder);
 		return scriptsArray;

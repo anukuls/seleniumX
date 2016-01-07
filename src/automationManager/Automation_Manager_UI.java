@@ -59,8 +59,8 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 	public Automation_Manager_UI() {
 		suitesArr = Read_Files.readDir();
 		batchArr = Read_Files.readBatchConfig();
-		System.out.println(suitesArr);
-		System.out.println(batchArr);
+//		System.out.println(suitesArr);
+//		System.out.println(batchArr);
 		
 		jp.setLayout(new GridLayout(15,50));
 		lbl = new JLabel("Welcome to the Automation Manager.  Please choose the mode of execution");
@@ -96,13 +96,10 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 					int mode_size = execution_mode.size();
 					if (mode_size == 0) {
 						execution_mode.add("single");
-						System.out.println("execution_mode if:" + execution_mode);
 						displaySingleModeUI(e);
 					}
 					else {
 						String current_mode = execution_mode.get(execution_mode.size() - 1);
-						System.out.println("current mode is :" + current_mode);
-						System.out.println("execution_mode else:" + execution_mode);
 						switch(current_mode)
 						{
 							case "single" :
@@ -110,27 +107,16 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 								displaySingleModeUI(e);
 								break;
 							case "multi" :
-								System.out.println("from multi to single");
 								displaySingleModeUI(e);
 								break;
 							case "batch" :
-								System.out.println("in case batch");
-//								jp.remove(lbl3);
-//								for (JRadioButton radio : radios) {
-//									jp.remove(radio);
-//								}
-//								jp.remove(executeBatch);
 								deleteBatchModeUIComponents();
 								displaySingleModeUI(e);
 								break;
 						}
 					}
 					
-				}
-				
-				System.out.println("Single mode radio state is: " + e.getStateChange());
-				
-								
+				}				
 			}
 			
 		});
@@ -244,7 +230,6 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 					int mode_size = execution_mode.size();
 					if (mode_size == 0) {
 						execution_mode.add("batch");
-						System.out.println("execution_mode if:" + execution_mode);
 						deleteSingleModeUIComponents();
 						lbl3.setText("Choose Batch to execute");
 						lbl3.setName("label3");
@@ -254,8 +239,6 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 					}
 					else {
 						String current_mode = execution_mode.get(execution_mode.size() - 1);
-						System.out.println("current mode is :" + current_mode);
-						System.out.println("execution_mode else:" + execution_mode);
 						switch(current_mode)
 						{
 							case "single" :
@@ -267,7 +250,6 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 								jp.repaint();
 								break;
 							case "multi" :
-								System.out.println("from multi to single");
 								execution_mode.add("batch");
 								deleteSingleModeUIComponents();
 								lbl3.setText("Choose Batch to execute");
@@ -277,7 +259,6 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 								jp.repaint();
 								break;
 							case "batch" :
-								System.out.println("in case batch");
 								execution_mode.add("batch");
 								deleteSingleModeUIComponents();
 								lbl3.setText("Choose Batch to execute");
@@ -362,7 +343,7 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 				    //TODO: 1. Execute the selected testng object
 				    String workingDir = System.getProperty("user.dir");
 				    String suite_path = workingDir + "\\src\\batchConfig\\" + rad.getText();
-				    System.out.println("suite path is : " + suite_path);
+//				    System.out.println("suite path is : " + suite_path);
 				    Batch_Driver.main(suite_path);
 				}
 			});
@@ -387,8 +368,6 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 	public void deleteAllButtons() {
 		Component[] cmps = jp.getComponents();
 		for (Component cmp : cmps) {
-			System.out.println(cmp.getClass().toString());
-			System.out.println(cmp.getName());
 			
 			if (cmp.getClass().toString().equals("class javax.swing.JButton") && cmp.getName().toString().equals("Execute")) {
 				jp.remove(cmp);
@@ -424,8 +403,6 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 	public void deleteSingleModeUIComponents() {
 		Component[] cmps = jp.getComponents();
 		for (Component cmp : cmps) {
-			System.out.println(cmp.getName().toString());
-			System.out.println(cmp.getClass().toString());
 			
 			if (cmp.getClass().toString().equals("class javax.swing.JLabel") && cmp.getName().toString().equals("label1")) {
 				jp.remove(cmp);
@@ -442,9 +419,6 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 	}
 	
 	public void deleteBatchModeUIComponents() {
-		jp.remove(lbl3);
-		
-		jp.remove(executeBatch);
 		Component[] cmps = jp.getComponents();
 		for (Component cmp : cmps) {
 			if (cmp.getClass().toString().equals("class javax.swing.JLabel") && cmp.getName().toString().equals("label3")) {
@@ -506,7 +480,7 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 		HashMap<String, ArrayList<String>> suite_script_hash = new HashMap<String, ArrayList<String>>();
 		
 		suite_script_hash = suites_hash;
-		System.out.println("Final suite script hash is: " + suite_script_hash);
+//		System.out.println("Final suite script hash is: " + suite_script_hash);
 		//TODO: form suite script hash here, and return
 		
 		
@@ -624,35 +598,35 @@ public class Automation_Manager_UI extends JPanel implements ItemListener {
 						String name = script_check.getText();
 						String parent = getParentSuite(name);
 						
-						System.out.println("Parent suite is: " + parent);
+//						System.out.println("Parent suite is: " + parent);
 						//NOTE: Need to move this checked_scripts var outside the event since it resets the array list 
 						//everytime a checkbox is checked
 //						ArrayList<String> checked_scripts = new ArrayList<String>();
 //						String[] checked_array = suites_hash.get(parent);
 						ArrayList<String> checked_array = suites_hash.get(parent);
-						System.out.println("checked array is: " + checked_array);
+//						System.out.println("checked array is: " + checked_array);
 //						Collections.addAll(checked_scripts , checked_array);
 						
 						if (script_check.isSelected()){
 							//NOTE: Need to remove .java from file names since TestNG does not like .java 
 							//in the class tag
 							checked_scripts.add("testScripts."+parent+"."+name.substring(0, name.length() - 5));
-							System.out.println("checked script is: " + checked_scripts);
+//							System.out.println("checked script is: " + checked_scripts);
 //							checked_array = (String[])checked_scripts.toArray();
 							
 							suites_hash.get(parent).add("testScripts."+parent+"."+name.substring(0, name.length() - 5));
 //							suites_hash.put(parent, checked_array);
 //							suites_hash.put(parent, checked_scripts);
-							System.out.println("suite script hash is: " + suites_hash);
+//							System.out.println("suite script hash is: " + suites_hash);
 						}
 						else {
 							checked_scripts.remove("testScripts."+parent+"."+name.substring(0, name.length() - 5));
-							System.out.println("checked script on removing is: " + checked_scripts);
+//							System.out.println("checked script on removing is: " + checked_scripts);
 //							checked_array = (String[])checked_scripts.toArray();
 //							suites_hash.put(parent, checked_array);
 //							suites_hash.put(parent, checked_scripts);
 							suites_hash.get(parent).remove("testScripts."+parent+"."+name.substring(0, name.length() - 5)); 
-							System.out.println("suite script hash on removing is: " + suites_hash);
+//							System.out.println("suite script hash on removing is: " + suites_hash);
 							
 						}
 					}

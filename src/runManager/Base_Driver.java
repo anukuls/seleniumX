@@ -44,7 +44,7 @@ public class Base_Driver {
 	
 	public static TestNG createTestNGXML(HashMap<String, ArrayList<String>> suites_arr) {
 		
-		System.out.println(suites_arr);
+//		System.out.println(suites_arr);
 		
 		//Create an instance on TestNG
 		TestNG myTestNG = new TestNG();
@@ -81,7 +81,7 @@ public class Base_Driver {
 			
 			List<XmlClass> myClasses = new ArrayList<XmlClass>();			
 			for (String script : suites_arr.get(suite)) {		
-				System.out.println("Script name is: " + script);
+//				System.out.println("Script name is: " + script);
 				//Create a list which can contain the classes that you want to run.				
 				myClasses.add(new XmlClass(script));
 			}
@@ -114,7 +114,7 @@ public class Base_Driver {
 		List<XmlSuite> mySuites = new ArrayList<XmlSuite>();
 		mySuites.add(mySuite);
 		
-		System.out.println(mySuites);
+//		System.out.println(mySuites);
 		
 //		List<Class> listenerClass = new ArrayList<Class>();
 //		listenerClass.add(utility.Custom_Reporter.class);
